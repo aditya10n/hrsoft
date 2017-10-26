@@ -13,6 +13,20 @@ import com.mysql.jdbc.util.ResultSetUtil;
 public class DBSingle {
 	SetConn conn = new SetConn();
 	
+	public void execute(String string){
+		try{  
+			Class.forName("com.mysql.jdbc.Driver");  
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://"+conn.host+"/"+conn.db,conn.user,conn.pass);  
+			Statement stmt=con.createStatement();
+			stmt.execute(string);
+			
+			con.close();  
+		}catch(Exception e){ 
+			System.out.println(e);
+		}
+	}
+	
 	public String hasilStmt(String string){
 		String hasil="";
 		try{  
@@ -51,6 +65,7 @@ public class DBSingle {
 				
 				for(int i=1;i<rsmd.getColumnCount();i++){
 					hasil[x][i-1]=rs.getString(i);
+					System.out.println(hasil[x][i-1]);
 				}
 				x++;
 			}while(rs.next());
@@ -74,14 +89,19 @@ public class DBSingle {
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery(string);
 			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
-			hasil=new String[rsmd.getColumnCount()];
-
-			//System.out.println(hasil[]);
+			
+			rs.next();
 			int x=0;
-			while(rs.next()){
-				hasil[x]=rs.getString(1);
+			hasil = new String[Integer.parseInt(rs.getString("COUNT"))];
+			
+			do{
+				
+				for(int i=1;i<rsmd.getColumnCount();i++){
+					hasil[x]=rs.getString(i);
+					System.out.println(hasil[x]);
+				}
 				x++;
-			}
+			}while(rs.next());
 			
 			
 			con.close();  

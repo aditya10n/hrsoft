@@ -37,6 +37,9 @@ import javax.swing.JTable;
 import Class.Pekerjaan;
 import DBConn.DBSingle;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class Jobs extends JFrame {
 
 	private JPanel contentPane;
@@ -44,6 +47,8 @@ public class Jobs extends JFrame {
 	//ArrayList<Pekerjaan> arr_job;
 	public String kode="";
 	private String[]listId;
+	private DBConn.Jobs job;
+	private JobPanel jp;
 
 	/**
 	 * Launch the application.
@@ -77,6 +82,11 @@ public class Jobs extends JFrame {
 		contentPane.add(panel, BorderLayout.NORTH);
 		
 		JButton btnNewButton = new JButton("CREATE");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createJob();
+			}
+		});
 		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
 		JLabel lblCreateANew = new JLabel("CREATE A NEW JOB");
@@ -134,7 +144,7 @@ public class Jobs extends JFrame {
 		panel_4.add(panel_5, BorderLayout.NORTH);
 		
 		preTable();
-		preCode();
+		
 		
 		table.addMouseListener(new MouseListener() {
 			
@@ -165,7 +175,7 @@ public class Jobs extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
-					JOptionPane.showConfirmDialog(null,"click"+listId[table.getSelectedRow()]);
+					
 				}
 				else{
 					
@@ -178,7 +188,7 @@ public class Jobs extends JFrame {
 	}
 	
 	public void preCode() {
-		DBConn.Jobs job = new DBConn.Jobs();
+		job = new DBConn.Jobs();
 		listId = job.listId();
 	}
 	
@@ -195,11 +205,35 @@ public class Jobs extends JFrame {
 		table.getColumnModel().getColumn(2).setMaxWidth(100);
 		table.getColumnModel().getColumn(3).setMaxWidth(100);
 		table.getColumnModel().getColumn(4).setMaxWidth(100);
+		
+		preCode();
 	}
 	
 	public DefaultTableModel preTableMod(){
 		DBConn.Jobs job = new DBConn.Jobs();
 		DefaultTableModel dm = job.tableModel(table);
 		return dm;
+	}
+	
+	public void createJob(){
+		jp = new JobPanel("Create a new Job");
+		int response = jp.showDialog("Create a new Job"); //==============================
+		if(response == 0){
+			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
+			preTable();
+		}else{
+			System.out.println("Fail");
+		}
+	}
+	
+	public void editJob(String id){
+		jp = new JobPanel("Edit a new Job");
+		int response = jp.showDialog("Edit a new Job"); //==============================
+		if(response == 0){
+			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
+			preTable();
+		}else{
+			System.out.println("Fail");
+		}
 	}
 }

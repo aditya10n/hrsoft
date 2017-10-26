@@ -53,7 +53,7 @@ public class Jobs {
 				+ "    AND pekerjaan.nama=PEKERJAAN)"
 				+ "    AS HIRED,"
 				+ "    "
-				+ "    (select count(pekerjaan.nama) from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan) AS COUNT"
+				+ "    (select count(pekerjaan.nama) from pekerjaan) AS COUNT"
 				+ "    "
 				+ "FROM pekerjaan");
 
@@ -68,9 +68,17 @@ public class Jobs {
 	
 	public String[] listId(){
 		String[] hasil=null;
-			hasil = db.hasilStmt3("Select id_pekerjaan from pekerjaan");
+		db = new DBSingle();
+			hasil = db.hasilStmt3("SELECT id_pekerjaan, "
+					+ "(select COUNT(id_pekerjaan) "
+					+ "from pekerjaan)AS COUNT "
+					+ "from pekerjaan");
 		return hasil;
 	}
 	
+	public void createJob(String name, String loc, String desc){
+		db.execute("INSERT INTO pekerjaan (nama,lokasi,deskripsi) "
+				+ "values ('"+name+"','"+loc+"','"+desc+"')");
+	}
 
 }
