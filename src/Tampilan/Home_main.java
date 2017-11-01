@@ -81,7 +81,7 @@ public class Home_main extends JFrame {
 	 * Create the frame.
 	 */
 	public Home_main() {
-		setTitle("Bulan Penimbangan Balita");
+		setTitle("HRSoft");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1024, 768);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -415,7 +415,7 @@ public class Home_main extends JFrame {
 	private void getCover() {
 		desktopPane.removeAll();
 		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Home", false, false);
+		internalFrame = new JInternalFrame("Jobs", false, false);
 		Jobs db = new Jobs();
 		internalFrame.setContentPane(db.getContentPane());
 		desktopPane.add(internalFrame);

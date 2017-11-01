@@ -39,6 +39,7 @@ import DBConn.DBSingle;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 public class Jobs extends JFrame {
 
@@ -49,6 +50,10 @@ public class Jobs extends JFrame {
 	private String[]listId;
 	private DBConn.Jobs job;
 	private JobPanel jp;
+	private JobCandPanel jcp;
+	private JButton btnSelect;
+	private JButton btnEdit;
+	private JButton btnDelete;
 
 	/**
 	 * Launch the application.
@@ -116,7 +121,7 @@ public class Jobs extends JFrame {
 		contentPane.add(panel_1, BorderLayout.WEST);
 		
 		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2, BorderLayout.SOUTH);
+		contentPane.add(panel_2, BorderLayout.EAST);
 		
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
@@ -142,6 +147,47 @@ public class Jobs extends JFrame {
 		
 		JPanel panel_5 = new JPanel();
 		panel_4.add(panel_5, BorderLayout.NORTH);
+		
+		JPanel panel_6 = new JPanel();
+		contentPane.add(panel_6, BorderLayout.SOUTH);
+		
+		btnSelect = new JButton("Show Candidates");
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openJob(listId[table.getSelectedRow()]);
+			}
+		});
+		btnSelect.setVisible(false);
+		
+		btnEdit = new JButton("Edit");
+		btnEdit.setVisible(false);
+		
+		btnDelete = new JButton("Delete");
+		btnDelete.setVisible(false);
+		
+		JButton btnAddCandidate = new JButton("Add Candidate");
+		GroupLayout gl_panel_6 = new GroupLayout(panel_6);
+		gl_panel_6.setHorizontalGroup(
+			gl_panel_6.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_6.createSequentialGroup()
+					.addComponent(btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+					.addComponent(btnAddCandidate)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSelect)
+					.addContainerGap())
+		);
+		gl_panel_6.setVerticalGroup(
+			gl_panel_6.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
+					.addComponent(btnSelect, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+					.addComponent(btnEdit, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnAddCandidate, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+		);
+		panel_6.setLayout(gl_panel_6);
 		
 		preTable();
 		
@@ -175,13 +221,12 @@ public class Jobs extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
-					
+					btnSelect.setVisible(true);
+					btnEdit.setVisible(true);
+					btnDelete.setVisible(true);
+					System.out.println(listId[table.getSelectedRow()]+", "+table.getSelectedRow()+", "+table.getSelectedColumn()+", "
+					+table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
 				}
-				else{
-					
-					
-				}
-				
 			}
 		});
 		
@@ -222,7 +267,7 @@ public class Jobs extends JFrame {
 			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
 			preTable();
 		}else{
-			System.out.println("Fail");
+			System.out.println("Cancel");
 		}
 	}
 	
@@ -233,7 +278,20 @@ public class Jobs extends JFrame {
 			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
 			preTable();
 		}else{
-			System.out.println("Fail");
+			System.out.println("Cancel");
+		}
+	}
+	
+	public void openJob(String id){
+		jcp = new JobCandPanel(table.getValueAt(table.getSelectedRow(), 0)+" Candidates", id);
+		int response = jcp.showDialog(table.getValueAt(table.getSelectedRow(), 0)+" Candidates"); //==============================
+		if(response == 0){
+			btnSelect.setVisible(false);
+			btnEdit.setVisible(false);
+			btnDelete.setVisible(false);
+			preTable();
+		}else{
+			System.out.println("Cancel");
 		}
 	}
 }
