@@ -69,7 +69,7 @@ public class Jobs {
 	public String[] listId(){
 		String[] hasil=null;
 		db = new DBSingle();
-			hasil = db.hasilStmt3("SELECT id_pekerjaan, "
+			hasil = db.hasilStmtV("SELECT id_pekerjaan, "
 					+ "(select COUNT(id_pekerjaan) "
 					+ "from pekerjaan)AS COUNT "
 					+ "from pekerjaan");

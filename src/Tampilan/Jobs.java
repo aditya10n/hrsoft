@@ -224,8 +224,8 @@ public class Jobs extends JFrame {
 					btnSelect.setVisible(true);
 					btnEdit.setVisible(true);
 					btnDelete.setVisible(true);
-					System.out.println(listId[table.getSelectedRow()]+", "+table.getSelectedRow()+", "+table.getSelectedColumn()+", "
-					+table.getValueAt(table.getSelectedRow(), table.getSelectedColumn()));
+					/*System.out.println(listId[table.getSelectedRow()]+", "+table.getSelectedRow()+", "+table.getSelectedColumn()+", "
+					+table.getValueAt(table.getSelectedRow(), table.getSelectedColumn())); */
 				}
 			}
 		});
@@ -255,7 +255,7 @@ public class Jobs extends JFrame {
 	}
 	
 	public DefaultTableModel preTableMod(){
-		DBConn.Jobs job = new DBConn.Jobs();
+		job = new DBConn.Jobs();
 		DefaultTableModel dm = job.tableModel(table);
 		return dm;
 	}

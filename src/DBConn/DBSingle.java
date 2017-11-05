@@ -80,7 +80,7 @@ public class DBSingle {
 		
 	}
 	
-	public String[] hasilStmt3(String string){
+	public String[] hasilStmtV(String string){
 		String[] hasil=null;
 		try{  
 			Class.forName("com.mysql.jdbc.Driver");  
@@ -101,6 +101,38 @@ public class DBSingle {
 					System.out.println(hasil[x]);
 				}
 				x++;
+			}while(rs.next());
+			
+			
+			con.close();  
+		}catch(Exception e){ 
+			System.out.println(e);
+		}
+		
+		return hasil;
+		
+	}
+	
+	public String[] hasilStmtH(String string){
+		String[] hasil=null;
+		try{  
+			Class.forName("com.mysql.jdbc.Driver");  
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://"+conn.host+"/"+conn.db,conn.user,conn.pass);  
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery(string);
+			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+			
+			rs.next();
+			int x=0;
+			hasil = new String[rsmd.getColumnCount()];
+			do{
+				
+				for(int i=1;x<hasil.length;i++){
+					hasil[x++]=rs.getString(i);
+					System.out.println(hasil[x-1]);
+				}
+				
 			}while(rs.next());
 			
 			

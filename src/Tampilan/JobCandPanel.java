@@ -24,6 +24,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.border.CompoundBorder;
 import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
@@ -50,6 +51,9 @@ public class JobCandPanel extends JPanel {
 	private DBConn.Candidate cand;
 	private JTextField textField_2;
 	private JSpinner toSpinner_1;
+	private JLabel label_2;
+	private JLabel label_1;
+	private JLabel label;
 	/**
 	 * Create the panel.
 	 */
@@ -74,15 +78,15 @@ public class JobCandPanel extends JPanel {
 		
 		JLabel lblApplicant = new JLabel("APPLICANT");
 		
-		JLabel label = new JLabel("0");
+		label = new JLabel("0");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JLabel label_1 = new JLabel("0");
+		label_1 = new JLabel("0");
 		label_1.setHorizontalAlignment(SwingConstants.CENTER);
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JLabel label_2 = new JLabel("0");
+		label_2 = new JLabel("0");
 		label_2.setHorizontalAlignment(SwingConstants.CENTER);
 		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GroupLayout gl_panel = new GroupLayout(panel);
@@ -406,8 +410,22 @@ public class JobCandPanel extends JPanel {
 		panel_4.setLayout(gl_panel_4);
 		panel_2.setLayout(gl_panel_2);
 		
-		setTable();
+		prepare(table, idJob);
 		
+		
+	}
+	
+	public void prepare(JTable tabel, String id){
+		setTable(table, id);
+		String[] sumGrup = cand.getSumGroup(id);
+		/*for (int i=0;i<sumGrup.length;i++){
+			if(sumGrup[i].equals("")){
+				sumGrup[i] = "0";
+			}
+		}*/
+		label_2.setText(sumGrup[0]);
+		label_1.setText(sumGrup[1]);
+		label.setText(sumGrup[2]);
 	}
 	
 	public int showDialog(String title) {
@@ -416,7 +434,22 @@ public class JobCandPanel extends JPanel {
 	            new String[] { "OK", "Cancel" }, "OK");
 	}
 	
-	public setTable(){
+	public void setTable(JTable tabel, String id){
+		table.setModel(setTableMod(tabel, id));
+		DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+		center.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		for (int i=0; i<table.getColumnCount();i++){
+			table.getColumnModel().getColumn(i).setCellRenderer(center);
+			table.getColumnModel().getColumn(i).setResizable(false);
+		}
+		table.getTableHeader().setReorderingAllowed(false);
+		
+	}
+	
+	public DefaultTableModel setTableMod(JTable tabel, String id){
+		cand = new Candidate();
+		DefaultTableModel dm = cand.jobCandTmodel(table, id);
+		return dm;
 	}
 }
