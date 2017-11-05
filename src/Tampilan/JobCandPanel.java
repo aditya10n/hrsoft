@@ -406,7 +406,7 @@ public class JobCandPanel extends JPanel {
 		panel_4.setLayout(gl_panel_4);
 		panel_2.setLayout(gl_panel_2);
 		
-		
+		setTable();
 		
 	}
 	
@@ -414,5 +414,9 @@ public class JobCandPanel extends JPanel {
 	      return JOptionPane.showOptionDialog(null, this, title,
 	            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 	            new String[] { "OK", "Cancel" }, "OK");
+	}
+	
+	public setTable(){
+		
 	}
 }

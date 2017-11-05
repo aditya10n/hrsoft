@@ -10,7 +10,7 @@ public class Candidate {
 	SetConn conn;
 	DBSingle db;
 	
-	public DefaultTableModel jobCandTmodel(JTable table){
+	public DefaultTableModel jobCandTmodel(JTable table, String idPekerjaan){
 		
 		DefaultTableModel dm = new DefaultTableModel(){
 			private static final long serialVersionUID = 1L;
@@ -21,38 +21,12 @@ public class Candidate {
 			
 		};
 		db = new DBSingle();
-		Object ob[][] = db.hasilStmt2("SELECT pekerjaan.nama AS NAME, pekerjaan.lokasi AS LOKASI,"
-				+ "	(SELECT "
-				+ "     	COUNT(kandidat.grup) "
-				+ "     FROM pekerjaan, kandidat"
-				+ "    WHERE kandidat.grup='APPLICANT'"
-				+ "    AND pekerjaan.id_pekerjaan=kandidat.id_pekerjaan"
-				+ "    AND pekerjaan.nama=PEKERJAAN)"
-				+ "    AS NAME,"
-				+ "    "
-				+ "    (SELECT "
-				+ "     	COUNT(kandidat.grup) "
-				+ "     FROM pekerjaan, kandidat"
-				+ "    WHERE kandidat.grup='INTERVIEW'"
-				+ "    AND pekerjaan.id_pekerjaan=kandidat.id_pekerjaan"
-				+ "    AND pekerjaan.nama=PEKERJAAN)"
-				+ "    AS INTERVIEW,"
-				+ "    "
-				+ "    (SELECT "
-				+ "     	COUNT(kandidat.grup) "
-				+ "     FROM pekerjaan, kandidat"
-				+ "    WHERE kandidat.grup='HIRED'"
-				+ "    AND pekerjaan.id_pekerjaan=kandidat.id_pekerjaan"
-				+ "    AND pekerjaan.nama=PEKERJAAN)"
-				+ "    AS HIRED,"
-				+ "    "
-				+ "    (select count(pekerjaan.nama) from pekerjaan) AS COUNT"
-				+ "    "
-				+ "FROM pekerjaan");
+		Object ob[][] = db.hasilStmt2("SELECT nama, grup, status FROM kandidat "
+				+ "WHERE id_pekerjaan="+idPekerjaan);
 
 		dm.setDataVector(ob,
 				new String[] { 
-			"NAME", "EMAIL", "PHONE", "ADDRESS", "GROUP"
+			"NAME", "GROUP", "STATUS"
 			});
 		
 		return dm;
