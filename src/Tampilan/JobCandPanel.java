@@ -32,6 +32,8 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -54,6 +56,15 @@ public class JobCandPanel extends JPanel {
 	private JLabel label_2;
 	private JLabel label_1;
 	private JLabel label;
+	private JLabel labelName;
+	private JLabel labelPhone;
+	private JLabel labelEmail;
+	private JTextPane textPane;
+	private JComboBox comboBox;
+	
+	private String[] listId;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -146,23 +157,23 @@ public class JobCandPanel extends JPanel {
 		JLabel lblAddress = new JLabel("Address");
 		lblAddress.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		JLabel labelName = new JLabel("<Name>");
+		labelName = new JLabel("<Name>");
 		labelName.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		JLabel labelEmail = new JLabel("<Email>");
+		labelEmail = new JLabel("<Email>");
 		labelEmail.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		JLabel labelPhone = new JLabel("<Phone>");
+		labelPhone = new JLabel("<Phone>");
 		labelPhone.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		JTextPane textPane = new JTextPane();
+		textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Set Interview", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setForeground(new Color(255, 0, 0));
 		comboBox.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
@@ -235,6 +246,41 @@ public class JobCandPanel extends JPanel {
 		));
 		scrollPane.setViewportView(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(table.isColumnSelected(table.getSelectedColumn())){
+					setDetail(listId[table.getSelectedRow()]);
+				}
+				
+			}
+		});
 		
 		
 		final UtilDateModel model = new UtilDateModel();
@@ -416,6 +462,9 @@ public class JobCandPanel extends JPanel {
 	}
 	
 	public void prepare(JTable tabel, String id){
+		cand = new Candidate();
+		listId = cand.listId();
+		
 		setTable(table, id);
 		String[] sumGrup = cand.getSumGroup(id);
 		/*for (int i=0;i<sumGrup.length;i++){
@@ -426,6 +475,22 @@ public class JobCandPanel extends JPanel {
 		label_2.setText(sumGrup[0]);
 		label_1.setText(sumGrup[1]);
 		label.setText(sumGrup[2]);
+	}
+	
+	public void setDetail(String id){
+		String[] detail = cand.getDetail(id);
+		labelName.setText(detail[0]);;
+		labelPhone.setText(detail[1]);
+		labelEmail.setText(detail[2]);
+		textPane.setText(detail[3]);
+		if(detail[4].equals("APPLICANT")){
+			comboBox.setSelectedIndex(0);
+		}else if(detail[4].equals("INTERVIEW")){
+			comboBox.setSelectedIndex(1);
+		}else  if(detail[4].equals("HIRED")){
+			comboBox.setSelectedIndex(2);
+		}
+		
 	}
 	
 	public int showDialog(String title) {
