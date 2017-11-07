@@ -54,13 +54,13 @@ public class Candidate {
 		return hasil;
 	}
 	
-	public String[] listId(){
+	public String[] listId(String id){
 		String[] hasil=null;
 		db = new DBSingle();
 			hasil = db.hasilStmtV("SELECT id_kandidat, "
 					+ "(select COUNT(id_kandidat) "
-					+ "from kandidat)AS COUNT "
-					+ "from kandidat");
+					+ "from kandidat where id_pekerjaan="+id+")AS COUNT "
+					+ "from kandidat where id_pekerjaan="+id);
 		return hasil;
 	}
 	
@@ -73,14 +73,14 @@ public class Candidate {
 				+ "phone AS PHONE, "
 				+ "alamat AS ADDRESS, "
 				+ "grup AS 'GROUP',"
-				+ "(SELECT tanggal from interview WHERE id_kandidat="+id+") AS DATE, "
-				+ "(SELECT jam_mulai from interview WHERE id_kandidat="+id+") AS 'START',"
-				+ "(SELECT jam_selesai from interview WHERE id_kandidat="+id+") AS 'TO',"
-				+ "(SELECT interview.dengan from interview WHERE id_kandidat="+id+") AS 'WITH',"
-				+ "(SELECT interview.lokasi from interview WHERE id_kandidat="+id+") AS 'LOCATION',"
-				+ "(SELECT interview.deskripsi from interview WHERE id_kandidat="+id+") AS 'DESCRIPTION'"
-				+ "from kandidat"
-				+ "WHERE id_kandidat="+id);
+				+ "(SELECT tanggal from interview WHERE id_kandidat="+id+"), "
+				+ "(SELECT jam_mulai from interview WHERE id_kandidat="+id+"),"
+				+ "(SELECT jam_selesai from interview WHERE id_kandidat="+id+"),"
+				+ "(SELECT dengan from interview WHERE id_kandidat="+id+"),"
+				+ "(SELECT lokasi from interview WHERE id_kandidat="+id+"),"
+				+ "(SELECT deskripsi from interview WHERE id_kandidat="+id+")"
+				+ " from kandidat"
+				+ " WHERE id_kandidat="+id);
 		return hasil;
 	}
 

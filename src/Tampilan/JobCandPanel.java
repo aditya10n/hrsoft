@@ -463,15 +463,13 @@ public class JobCandPanel extends JPanel {
 	
 	public void prepare(JTable tabel, String id){
 		cand = new Candidate();
-		listId = cand.listId();
+		listId = cand.listId(id);
 		
 		setTable(table, id);
 		String[] sumGrup = cand.getSumGroup(id);
-		/*for (int i=0;i<sumGrup.length;i++){
-			if(sumGrup[i].equals("")){
-				sumGrup[i] = "0";
-			}
-		}*/
+		for (int i=0;i<listId.length;i++){
+			System.out.print(listId[i]+", ");
+		}
 		label_2.setText(sumGrup[0]);
 		label_1.setText(sumGrup[1]);
 		label.setText(sumGrup[2]);

@@ -129,8 +129,9 @@ public class DBSingle {
 			do{
 				
 				for(int i=1;x<hasil.length;i++){
-					hasil[x++]=rs.getString(i);
-					System.out.println(hasil[x-1]);
+					hasil[x]=rs.getString(i);
+					System.out.println(hasil[x]);
+					x++;
 				}
 				
 			}while(rs.next());
