@@ -32,11 +32,21 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import java.awt.Color;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.SpinnerModel;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -47,12 +57,19 @@ import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeListener;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JobCandPanel extends JPanel {
 	private JTable table;
 	private DBConn.Candidate cand;
+	private JPanel panel_5;
 	private JTextField textField_2;
-	private JSpinner toSpinner_1;
+	private JButton btnSave;
+	private String id;
+	
 	private JLabel label_2;
 	private JLabel label_1;
 	private JLabel label;
@@ -61,6 +78,16 @@ public class JobCandPanel extends JPanel {
 	private JLabel labelEmail;
 	private JTextPane textPane;
 	private JComboBox comboBox;
+	private JComboBox comboBox_1;
+	private UtilDateModel model;
+	private JDatePanelImpl datePanel;
+	private JDatePickerImpl datePicker;
+	private JSpinner startSpinner;
+	private JSpinner toSpinner_1;
+	private JTextPane textPane_2;
+	private JTextPane textPane_1;
+	
+	
 	
 	private String[] listId;
 	
@@ -170,14 +197,53 @@ public class JobCandPanel extends JPanel {
 		textPane.setEditable(false);
 		textPane.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		JPanel panel_5 = new JPanel();
+		panel_5 = new JPanel();
 		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Set Interview", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
+		//panel_5.setVisible(false);
 		comboBox = new JComboBox();
 		comboBox.setForeground(new Color(255, 0, 0));
 		comboBox.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
 		comboBox.setSelectedIndex(1);
+		panel_5.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				btnSave.setVisible(true);
+				
+			}
+		});
+		
+		btnSave = new JButton("Save Interview");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				updateDataInterview();
+			}
+		});
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -190,17 +256,18 @@ public class JobCandPanel extends JPanel {
 						.addComponent(lblAddress))
 					.addGap(41)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_3.createSequentialGroup()
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-									.addComponent(labelName)
-									.addComponent(labelEmail))
-								.addComponent(labelPhone))
-							.addPreferredGap(ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(labelName)
+						.addComponent(labelEmail)
+						.addComponent(labelPhone)
 						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 				.addComponent(panel_5, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+				.addGroup(Alignment.TRAILING, gl_panel_3.createSequentialGroup()
+					.addContainerGap(351, Short.MAX_VALUE)
+					.addComponent(btnSave)
+					.addContainerGap())
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -215,18 +282,20 @@ public class JobCandPanel extends JPanel {
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblEmail)
 								.addComponent(labelEmail))
-							.addPreferredGap(ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPhone)
-								.addComponent(labelPhone)))
-						.addComponent(comboBox, GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
+							.addGap(6)
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelPhone)
+								.addComponent(lblPhone))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblAddress)
+								.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblAddress)
-						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))
+					.addComponent(btnSave)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-					.addGap(8))
+					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		panel_3.setLayout(gl_panel_3);
 		
@@ -283,9 +352,9 @@ public class JobCandPanel extends JPanel {
 		});
 		
 		
-		final UtilDateModel model = new UtilDateModel();
-		JDatePanelImpl datePanel = new JDatePanelImpl(model);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+		model = new UtilDateModel();
+		datePanel = new JDatePanelImpl(model);
+		datePicker = new JDatePickerImpl(datePanel);
 		datePicker.getJFormattedTextField().setFont(new Font("Times New Roman", Font.BOLD, 12));
 		datePicker.getJFormattedTextField().setText("Set Date -->");
 		datePicker.getJFormattedTextField().setBackground(new Color(255, 255, 102));
@@ -316,7 +385,7 @@ public class JobCandPanel extends JPanel {
 		JPanel panel_6 = new JPanel();
 		panel_6.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JSpinner startSpinner;
+		
 		Date date = new Date();
 		  SpinnerDateModel sm = 
 		  new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
@@ -324,7 +393,6 @@ public class JobCandPanel extends JPanel {
 		JSpinner.DateEditor de = new JSpinner.DateEditor(startSpinner, "HH:mm");
 		startSpinner.setEditor(de);
 		
-		JSpinner toSpinner = new JSpinner();
 		Date dateTo = new Date();
 		  SpinnerDateModel smTo = 
 		  new SpinnerDateModel(dateTo, null, null, Calendar.HOUR_OF_DAY);
@@ -332,7 +400,7 @@ public class JobCandPanel extends JPanel {
 		JSpinner.DateEditor deTo = new JSpinner.DateEditor(toSpinner_1, "HH:mm");
 		toSpinner_1.setEditor(deTo);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1 = new JComboBox();
 		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"not Ready", "Ready"}));
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -414,14 +482,14 @@ public class JobCandPanel extends JPanel {
 					.addContainerGap())
 		);
 		
-		JTextPane textPane_2 = new JTextPane();
+		textPane_2 = new JTextPane();
 		scrollPane_2.setViewportView(textPane_2);
 		panel_6.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_6.add(scrollPane_1, BorderLayout.CENTER);
 		
-		JTextPane textPane_1 = new JTextPane();
+		textPane_1 = new JTextPane();
 		scrollPane_1.setViewportView(textPane_1);
 		panel_5.setLayout(gl_panel_5);
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -477,7 +545,7 @@ public class JobCandPanel extends JPanel {
 	
 	public void setDetail(String id){
 		String[] detail = cand.getDetail(id);
-		labelName.setText(detail[0]);;
+		labelName.setText(detail[0]);
 		labelPhone.setText(detail[1]);
 		labelEmail.setText(detail[2]);
 		textPane.setText(detail[3]);
@@ -488,7 +556,34 @@ public class JobCandPanel extends JPanel {
 		}else  if(detail[4].equals("HIRED")){
 			comboBox.setSelectedIndex(2);
 		}
+		if(detail[5].equals("not Ready")){
+			comboBox_1.setSelectedIndex(0);
+		}else if(detail[5].equals("Ready")){
+			comboBox_1.setSelectedIndex(1);
+		}
+		if(!detail[6].equals(""))	
+		datePicker.getJFormattedTextField().setText(detail[6]);
 		
+		System.out.println(
+				Integer.parseInt(detail[6].substring(0,4))+", "+
+				Integer.parseInt(detail[6].substring(5,7))+", "+ 
+				Integer.parseInt(detail[6].substring(8,10))+", "+
+				Integer.parseInt(detail[7].substring(0,2))+", "+
+				Integer.parseInt(detail[7].substring(3,5)));
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		try {
+			startSpinner.setValue(format.parseObject(detail[7]));
+			toSpinner_1.setValue(format.parseObject(detail[8]));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		textField_2.setText(detail[9]);
+		textPane_2.setText(detail[10]);
+		textPane_1.setText(detail[11]);
 	}
 	
 	public int showDialog(String title) {
@@ -514,5 +609,9 @@ public class JobCandPanel extends JPanel {
 		cand = new Candidate();
 		DefaultTableModel dm = cand.jobCandTmodel(table, id);
 		return dm;
+	}
+	
+	public void updateDataInterview(){
+		
 	}
 }
