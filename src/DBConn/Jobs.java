@@ -66,6 +66,20 @@ public class Jobs {
 		
 	}
 	
+	public Pekerjaan getData(String id){
+		job = new Pekerjaan();
+		String[] hasil=null;
+		db = new DBSingle();
+		hasil = db.hasilStmtH("SELECT id_pekerjaan, "
+				+ "nama, lokasi, deskripsi "
+				+ "from pekerjaan WHERE id_pekerjaan="+id);
+		job.setId_pekerjaan(hasil[0]);
+		job.setNama(hasil[1]);
+		job.setLokasi(hasil[2]);
+		job.setDeskripsi(hasil[3]);
+		return job;
+	}
+	
 	public String[] listId(){
 		String[] hasil=null;
 		db = new DBSingle();
@@ -76,9 +90,16 @@ public class Jobs {
 		return hasil;
 	}
 	
-	public void createJob(String name, String loc, String desc){
+	public void createJob(String nama, String loc, String desc){
 		db.execute("INSERT INTO pekerjaan (nama,lokasi,deskripsi) "
-				+ "values ('"+name+"','"+loc+"','"+desc+"')");
+				+ "values ('"+nama+"','"+loc+"','"+desc+"')");
+	}
+	
+	public void editJob(Pekerjaan job){
+		db.execute("UPDATE pekerjaan SET nama = '"+job.getNama()+"',"
+				+ "lokasi = '"+job.getLokasi()+"',"
+				+ "deskripsi = '"+job.getDeskripsi()+"' "
+				+ "WHERE id_pekerjaan ="+job.getId_pekerjaan());
 	}
 
 }

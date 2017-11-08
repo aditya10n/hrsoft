@@ -73,6 +73,7 @@ public class Candidate {
 				+ "phone AS PHONE, "
 				+ "alamat AS ADDRESS, "
 				+ "grup AS 'GROUP',"
+				+ "status as 'STATUS',"
 				+ "(SELECT tanggal from interview WHERE id_kandidat="+id+"), "
 				+ "(SELECT jam_mulai from interview WHERE id_kandidat="+id+"),"
 				+ "(SELECT jam_selesai from interview WHERE id_kandidat="+id+"),"

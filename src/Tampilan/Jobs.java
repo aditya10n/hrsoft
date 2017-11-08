@@ -162,6 +162,15 @@ public class Jobs extends JFrame {
 		btnEdit = new JButton("Edit");
 		btnEdit.setVisible(false);
 		
+		btnEdit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				editJob(listId[table.getSelectedRow()]);
+				
+			}
+		});
+		
 		btnDelete = new JButton("Delete");
 		btnDelete.setVisible(false);
 		
@@ -273,9 +282,18 @@ public class Jobs extends JFrame {
 	
 	public void editJob(String id){
 		jp = new JobPanel("Edit a new Job");
+		Pekerjaan pk = job.getData(id);
+		jp.setId(pk.getId_pekerjaan());
+		jp.setName(pk.getNama());
+		jp.setLoc(pk.getLokasi());
+		jp.setDesc(pk.getDeskripsi());
 		int response = jp.showDialog("Edit a new Job"); //==============================
 		if(response == 0){
-			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
+			pk.setId_pekerjaan(jp.getId());
+			pk.setNama(jp.getName());
+			pk.setLokasi(jp.getLoc());
+			pk.setDeskripsi(jp.getDesc());
+			job.editJob(pk);
 			preTable();
 		}else{
 			System.out.println("Cancel");
