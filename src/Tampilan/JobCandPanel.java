@@ -36,6 +36,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -205,6 +207,7 @@ public class JobCandPanel extends JPanel {
 		comboBox.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
 		comboBox.setSelectedIndex(1);
+		
 		panel_5.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -227,13 +230,13 @@ public class JobCandPanel extends JPanel {
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				btnSave.setVisible(true);
 				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				btnSave.setVisible(true);
+				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -242,11 +245,14 @@ public class JobCandPanel extends JPanel {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				updateDataInterview();
+				btnSave.setVisible(true);
 			}
+			
 		});
+		btnSave.setVisible(false);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
-			gl_panel_3.createParallelGroup(Alignment.LEADING)
+			gl_panel_3.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_3.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -261,13 +267,11 @@ public class JobCandPanel extends JPanel {
 						.addComponent(labelPhone)
 						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnSave))
 					.addContainerGap())
-				.addComponent(panel_5, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-				.addGroup(Alignment.TRAILING, gl_panel_3.createSequentialGroup()
-					.addContainerGap(351, Short.MAX_VALUE)
-					.addComponent(btnSave)
-					.addContainerGap())
+				.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -289,12 +293,12 @@ public class JobCandPanel extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblAddress)
-								.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+									.addComponent(btnSave)
+									.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSave)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		panel_3.setLayout(gl_panel_3);
@@ -407,7 +411,7 @@ public class JobCandPanel extends JPanel {
 		
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
-			gl_panel_5.createParallelGroup(Alignment.TRAILING)
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_5.createSequentialGroup()
@@ -421,7 +425,7 @@ public class JobCandPanel extends JPanel {
 									.addComponent(lblStart)
 									.addGap(18)
 									.addComponent(startSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 89, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED, 93, Short.MAX_VALUE))
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(lblTime))
@@ -430,7 +434,7 @@ public class JobCandPanel extends JPanel {
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_5.createSequentialGroup()
 									.addGap(4)
-									.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+									.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
 								.addComponent(lblNewLabel))
 							.addGap(6))
 						.addGroup(gl_panel_5.createSequentialGroup()
@@ -438,16 +442,16 @@ public class JobCandPanel extends JPanel {
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_5.createSequentialGroup()
 									.addGap(4)
-									.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+									.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED))
 								.addComponent(lblWith))
 							.addGap(6)))
 					.addGap(0)
 					.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-				.addGroup(Alignment.LEADING, gl_panel_5.createSequentialGroup()
+				.addGroup(gl_panel_5.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
 					.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_panel_5.setVerticalGroup(
@@ -456,11 +460,11 @@ public class JobCandPanel extends JPanel {
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 						.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addGap(3)
 							.addComponent(lblTime)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblStart)
 								.addComponent(startSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -475,10 +479,10 @@ public class JobCandPanel extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblNewLabel)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
+							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+							.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		
