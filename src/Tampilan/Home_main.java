@@ -1,3 +1,4 @@
+
 package Tampilan;
 
 import java.awt.BorderLayout;
@@ -130,7 +131,7 @@ public class Home_main extends JFrame {
 		btnDataJob.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnDataJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			getCover();
+				getCover();
 			}
 		});
 		

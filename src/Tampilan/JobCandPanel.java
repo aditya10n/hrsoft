@@ -43,8 +43,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -241,11 +243,10 @@ public class JobCandPanel extends JPanel {
 			}
 		});
 		
-		btnSave = new JButton("Save Interview");
+		btnSave = new JButton("Set Interview");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				updateDataInterview();
-				btnSave.setVisible(true);
+				openSetInterview();
 			}
 			
 		});
@@ -539,9 +540,15 @@ public class JobCandPanel extends JPanel {
 		
 		setTable(table, id);
 		String[] sumGrup = cand.getSumGroup(id);
-		for (int i=0;i<listId.length;i++){
-			System.out.print(listId[i]+", ");
+		
+		try {
+			for (int i=0;i<listId.length;i++){
+				System.out.print(listId[i]+", ");
+			}
+		} catch (java.lang.NullPointerException e) {
+			JOptionPane.showMessageDialog(null, "No Candidate(s)");
 		}
+		
 		label_2.setText(sumGrup[0]);
 		label_1.setText(sumGrup[1]);
 		label.setText(sumGrup[2]);
@@ -567,7 +574,6 @@ public class JobCandPanel extends JPanel {
 		}
 		if(!detail[6].equals(""))	
 		datePicker.getJFormattedTextField().setText(detail[6]);
-		
 		System.out.println(
 				Integer.parseInt(detail[6].substring(0,4))+", "+
 				Integer.parseInt(detail[6].substring(5,7))+", "+ 
@@ -615,7 +621,15 @@ public class JobCandPanel extends JPanel {
 		return dm;
 	}
 	
-	public void updateDataInterview(){
+	
+	public void openSetInterview(){
+		SetInterviewPanel sIP = new SetInterviewPanel();
 		
+		int response = sIP.showDialog("Set Interview"); //==============================
+		if(response == 0){
+			System.out.println("Save Set Interview");
+		}else{
+			System.out.println("Cancel");
+		}
 	}
 }
