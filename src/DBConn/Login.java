@@ -7,7 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import Class.Staff;
+import Kelas.Staff;
 
 public class Login{
 	

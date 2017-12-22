@@ -10,7 +10,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import Class.Pekerjaan;
+import Kelas.Pekerjaan;
 
 public class Jobs {
 	Pekerjaan job;
@@ -100,6 +100,11 @@ public class Jobs {
 				+ "lokasi = '"+job.getLokasi()+"',"
 				+ "deskripsi = '"+job.getDeskripsi()+"' "
 				+ "WHERE id_pekerjaan ="+job.getId_pekerjaan());
+	}
+	
+	public void deleteJob(String id_pekerjaan){
+		db.execute("DELETE from pekerjaan "
+				+ "WHERE id_pekerjaan='"+id_pekerjaan+"'");
 	}
 
 }

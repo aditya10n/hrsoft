@@ -34,8 +34,11 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import Class.Pekerjaan;
+import DBConn.Candidate;
 import DBConn.DBSingle;
+import DBConn.Interview;
+import Kelas.Kandidat;
+import Kelas.Pekerjaan;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -172,9 +175,39 @@ public class Jobs extends JFrame {
 		});
 		
 		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				deleteJob(listId[table.getSelectedRow()]);
+			}
+		});
 		btnDelete.setVisible(false);
 		
 		JButton btnAddCandidate = new JButton("Add Candidate");
+		btnAddCandidate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CandidatePanel cp = new CandidatePanel();
+				
+				int response = cp.showDialog("Add Candidate job "); //==============================
+				if(response == 0){
+					System.out.println("Save candidate");
+					Kandidat kan = new Kandidat();
+					kan.setStatus(cp.getStatus());
+					kan.setEducation(cp.getEdu());
+					kan.setExperience(cp.getExp());
+					kan.setGroup(cp.getGroup());
+					kan.setNama(cp.getNama());
+					kan.setPhone(cp.getPhone());
+					kan.setEmail(cp.getEmail());
+					kan.setAlamat(cp.getAlamat());
+
+					Candidate cand = new Candidate();
+					cand.addCandidate(kan, "admin", listId[table.getSelectedRow()]);
+					preTable();
+				}else{
+					System.out.println("Cancel");
+				}
+			}
+		});
 		GroupLayout gl_panel_6 = new GroupLayout(panel_6);
 		gl_panel_6.setHorizontalGroup(
 			gl_panel_6.createParallelGroup(Alignment.TRAILING)
@@ -307,9 +340,15 @@ public class Jobs extends JFrame {
 			btnSelect.setVisible(false);
 			btnEdit.setVisible(false);
 			btnDelete.setVisible(false);
+			
 			preTable();
 		}else{
 			System.out.println("Cancel");
 		}
+	}
+	
+	public void deleteJob(String id_pekerjaan){
+		job.deleteJob(id_pekerjaan);
+		preTable();
 	}
 }

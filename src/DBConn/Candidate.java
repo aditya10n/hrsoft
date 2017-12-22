@@ -3,10 +3,9 @@ package DBConn;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import Class.Pelamar;
+import Kelas.Kandidat;
 
 public class Candidate {
-	Pelamar cand;
 	SetConn conn;
 	DBSingle db;
 	
@@ -84,5 +83,36 @@ public class Candidate {
 				+ " WHERE id_kandidat="+id);
 		return hasil;
 	}
+	
+	public void addCandidate(Kandidat kan, String username, String id_pekerjaan){
+		db = new DBSingle();
+		db.execute("INSERT into kandidat VALUES("
+				+ "NULL,"
+				+ "'"+username+"',"
+				+ "'"+id_pekerjaan+"',"
+				+ "'"+kan.getStatus()+"',"
+				+ "'"+kan.getEducation()+"',"
+				+ "'"+kan.getExperience()+"',"
+				+ "'"+kan.getGroup()+"',"
+				+ "'"+kan.getNama()+"',"
+				+ "'"+kan.getPhone()+"',"
+				+ "'"+kan.getEmail()+"',"
+				+ "'"+kan.getAlamat()+"'"
+				+ ")");
+	}
+	
+	public void deleteCandidate(String id_kandidat){
+		db = new DBSingle();
+		db.execute("DELETE from kandidat "
+				+ "WHERE id_kandidat='"+id_kandidat+"'");
+	}
+	
+	public void editGroup(String id_kandidat, String group){
+		db= new DBSingle();
+		db.execute("UPDATE kandidat SET "
+				+ "grup='"+group+"' "
+				+ "WHERE id_kandidat='"+id_kandidat+"'");
+	}
+
 
 }

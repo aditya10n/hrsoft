@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultFormatter;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
@@ -18,6 +19,9 @@ import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +43,13 @@ public class SetInterviewPanel extends JPanel {
 	private JDatePanelImpl datePanel;
 	private JDatePickerImpl datePicker;
 	private JTextField textField;
+	JTextPane textPane;
+	JTextPane textPane_1;
+	JSpinner spinner;
+	JSpinner spinner_1;
+	JSpinner.DateEditor de,deTo;
+	
+	JComboBox comboBox;
 	/**
 	 * Create the panel.
 	 */
@@ -59,7 +70,7 @@ public class SetInterviewPanel extends JPanel {
 		
 		panel.add(datePicker);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"not Ready", "Ready"}));
 		
 		JPanel panel_1 = new JPanel();
@@ -111,14 +122,14 @@ public class SetInterviewPanel extends JPanel {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_4.add(scrollPane_1, BorderLayout.CENTER);
 		
-		JTextPane textPane_1 = new JTextPane();
+		textPane_1 = new JTextPane();
 		scrollPane_1.setViewportView(textPane_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
-		JTextPane textPane = new JTextPane();
+		textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
 		panel_3.setLayout(new BorderLayout(0, 0));
 		//scrollPane.setViewportView(textPane);
@@ -131,21 +142,22 @@ public class SetInterviewPanel extends JPanel {
 		
 		JLabel lblTo = new JLabel("to");
 		
-		JSpinner spinner = new JSpinner();
+		spinner = new JSpinner();
 		Date date = new Date();
 		  SpinnerDateModel sm = 
 		  new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
 		  spinner = new javax.swing.JSpinner(sm);
-		JSpinner.DateEditor de = new JSpinner.DateEditor(spinner, "HH:mm");
+		de = new JSpinner.DateEditor(spinner, "HH:mm");
+		
 		spinner.setEditor(de);
 		
 		
-		JSpinner spinner_1 = new JSpinner();
+		spinner_1 = new JSpinner();
 		Date dateTo = new Date();
 		  SpinnerDateModel smTo = 
 		  new SpinnerDateModel(dateTo, null, null, Calendar.HOUR_OF_DAY);
 		  spinner_1 = new javax.swing.JSpinner(smTo);
-		JSpinner.DateEditor deTo = new JSpinner.DateEditor(spinner_1, "HH:mm");
+		deTo = new JSpinner.DateEditor(spinner_1, "HH:mm");
 		spinner_1.setEditor(deTo);
 		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -185,12 +197,73 @@ public class SetInterviewPanel extends JPanel {
 	            new String[] { "OK", "Cancel" }, "OK");
 	}
 	
-	public void setTgl(String tgl){
-		datePicker.getJFormattedTextField().setText(tgl);
+	public void setTgl(int y, int m, int d){
+		model.setSelected(true);
+		model.setDate(y, m-1, d);
+		datePanel= new JDatePanelImpl(model);
+		datePicker = new JDatePickerImpl(datePanel);
 	}
 	
 	public String getTgl(){
-		//datePicker.getJFormattedTextField().getText().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"),);
-		return null;
+		String tgl = model.getYear() +"-"+ Integer.toString(model.getMonth()+1)+"-"+ model.getDay();
+		return tgl;
 	}
+	
+	public void setDesc(String desc){
+		this.textPane.setText(desc);
+	}
+	
+	public String getDesc(){
+		return this.textPane.getText();
+	}
+	
+	
+	public void setWith(String with){
+		this.textField.setText(with);
+	}
+	
+	public String getWith(){
+		return this.textField.getText();
+	}
+	
+	public void setLoc(String loc){
+		this.textPane_1.setText(loc);
+	}
+	
+	public String getLoc(){
+		return this.textPane_1.getText();
+	}
+	
+	public void setTime(String start, String to){
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		try {
+			spinner.setValue(format.parseObject(start));
+			spinner_1.setValue(format.parseObject(to));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String getTimeStart(){
+		return de.getFormat().format(spinner.getValue())+":00";
+	}
+	
+	public String getTimeTo(){
+		return deTo.getFormat().format(spinner_1.getValue())+":00";
+	}
+	
+	
+	public void setStatus(String status){
+		if(status.equals("not Ready")){
+			comboBox.setSelectedIndex(0);
+		}else if(status.equals("Ready")){
+			comboBox.setSelectedIndex(1);
+		}
+	}
+	
+	public String getStatus(){
+		return comboBox.getItemAt(comboBox.getSelectedIndex()).toString();
+	}
+	
 }

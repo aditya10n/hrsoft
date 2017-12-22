@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import DBConn.Candidate;
+import Kelas.Kandidat;
 
 import java.awt.Font;
 
@@ -38,10 +39,13 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.Character.Subset;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -61,6 +65,8 @@ import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeListener;
 
 import java.awt.event.ActionListener;
@@ -71,7 +77,7 @@ public class JobCandPanel extends JPanel {
 	private DBConn.Candidate cand;
 	private JPanel panel_5;
 	private JTextField textField_2;
-	private JButton btnSave;
+	private JButton btnSetInter;
 	private String id;
 	
 	private JLabel label_2;
@@ -80,26 +86,30 @@ public class JobCandPanel extends JPanel {
 	private JLabel labelName;
 	private JLabel labelPhone;
 	private JLabel labelEmail;
-	private JTextPane textPane;
+	private JTextPane alamat;
 	private JComboBox comboBox;
-	private JComboBox comboBox_1;
 	private UtilDateModel model;
 	private JDatePanelImpl datePanel;
-	private JDatePickerImpl datePicker;
 	private JSpinner startSpinner;
 	private JSpinner toSpinner_1;
 	private JTextPane textPane_2;
 	private JTextPane textPane_1;
 	
+	Kelas.Kandidat kand;
+	Kelas.Interview inter;
 	
+	JSpinner.DateEditor de, deTo;
 	
 	private String[] listId;
+	String start;
+	String to;
 	
 	
 	/**
 	 * Create the panel.
 	 */
 	public JobCandPanel(String title, String idJob) {
+		id=idJob;
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_1 = new JPanel();
@@ -197,9 +207,9 @@ public class JobCandPanel extends JPanel {
 		labelPhone = new JLabel("<Phone>");
 		labelPhone.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		alamat = new JTextPane();
+		alamat.setEditable(false);
+		alamat.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
 		panel_5 = new JPanel();
 		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Set Interview", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -210,47 +220,38 @@ public class JobCandPanel extends JPanel {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
 		comboBox.setSelectedIndex(1);
 		
-		panel_5.addMouseListener(new MouseListener() {
+		comboBox.addActionListener(new ActionListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnSave.setVisible(true);
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+			public void actionPerformed(ActionEvent arg0) {
+				if(!table.getValueAt(table.getSelectedRow(), 1).equals(comboBox.getSelectedItem().toString())){
+					System.out.println("Action !!");
+					cand.editGroup(listId[table.getSelectedRow()], comboBox.getSelectedItem().toString());
+					prepare(table, id);
+				}
 				
 			}
 		});
 		
-		btnSave = new JButton("Set Interview");
-		btnSave.addActionListener(new ActionListener() {
+		btnSetInter = new JButton("Set Interview");
+		btnSetInter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				openSetInterview();
 			}
 			
 		});
-		btnSave.setVisible(false);
+		btnSetInter.setVisible(false);
+		
+		JButton btnDeleteCandidate = new JButton("Delete Candidate");
+		btnDeleteCandidate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int result = JOptionPane.showConfirmDialog(null, "Delete Candidate :"+table.getValueAt( table.getSelectedRow(),0)+"?");
+				if(result == 0){
+					cand.deleteCandidate(listId[table.getSelectedRow()]);
+					prepare(table, id);
+				}
+			}
+		});
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
@@ -266,11 +267,12 @@ public class JobCandPanel extends JPanel {
 						.addComponent(labelName)
 						.addComponent(labelEmail)
 						.addComponent(labelPhone)
-						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+						.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnSave))
+						.addComponent(btnDeleteCandidate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnSetInter, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addContainerGap())
 				.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
 		);
@@ -295,8 +297,11 @@ public class JobCandPanel extends JPanel {
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblAddress)
 								.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
-									.addComponent(btnSave)
-									.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))
+									.addGroup(gl_panel_3.createSequentialGroup()
+										.addComponent(btnDeleteCandidate)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnSetInter))
+									.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
@@ -351,6 +356,7 @@ public class JobCandPanel extends JPanel {
 			public void mouseClicked(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
 					setDetail(listId[table.getSelectedRow()]);
+					btnSetInter.setVisible(true);
 				}
 				
 			}
@@ -359,15 +365,6 @@ public class JobCandPanel extends JPanel {
 		
 		model = new UtilDateModel();
 		datePanel = new JDatePanelImpl(model);
-		datePicker = new JDatePickerImpl(datePanel);
-		datePicker.getJFormattedTextField().setFont(new Font("Times New Roman", Font.BOLD, 12));
-		datePicker.getJFormattedTextField().setText("Set Date -->");
-		datePicker.getJFormattedTextField().setBackground(new Color(255, 255, 102));
-		datePicker.setBackground(new Color(255, 255, 153));
-		SpringLayout springLayout = (SpringLayout) datePicker.getLayout();
-		springLayout.putConstraint(SpringLayout.SOUTH, datePicker.getJFormattedTextField(), 0, SpringLayout.SOUTH, datePicker);
-		datePicker.setBounds(580, 6, 150, 25);
-		panel_5.add(datePicker);
 		
 		JLabel lblTime = new JLabel("Time");
 		lblTime.setFont(new Font("Times New Roman", Font.BOLD, 12));
@@ -395,20 +392,22 @@ public class JobCandPanel extends JPanel {
 		  SpinnerDateModel sm = 
 		  new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
 		  startSpinner = new javax.swing.JSpinner(sm);
-		JSpinner.DateEditor de = new JSpinner.DateEditor(startSpinner, "HH:mm");
+		de = new JSpinner.DateEditor(startSpinner, "HH:mm");
 		startSpinner.setEditor(de);
 		
 		Date dateTo = new Date();
 		  SpinnerDateModel smTo = 
 		  new SpinnerDateModel(dateTo, null, null, Calendar.HOUR_OF_DAY);
 		  toSpinner_1 = new javax.swing.JSpinner(smTo);
-		JSpinner.DateEditor deTo = new JSpinner.DateEditor(toSpinner_1, "HH:mm");
+		deTo = new JSpinner.DateEditor(toSpinner_1, "HH:mm");
 		toSpinner_1.setEditor(deTo);
 		
-		comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"not Ready", "Ready"}));
-		
 		JScrollPane scrollPane_2 = new JScrollPane();
+		
+		JLabel lblDate = new JLabel("Date");
+		lblDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		JLabel lblZzz = new JLabel("zzz");
 		
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
@@ -451,16 +450,20 @@ public class JobCandPanel extends JPanel {
 					.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
-					.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addComponent(lblDate)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblZzz)
+					.addContainerGap(361, Short.MAX_VALUE))
 		);
 		gl_panel_5.setVerticalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblDate)
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblZzz)))
+					.addGap(3)
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addGap(3)
@@ -480,7 +483,7 @@ public class JobCandPanel extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblNewLabel)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
+							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
@@ -538,7 +541,7 @@ public class JobCandPanel extends JPanel {
 		cand = new Candidate();
 		listId = cand.listId(id);
 		
-		setTable(table, id);
+		setTable(tabel, id);
 		String[] sumGrup = cand.getSumGroup(id);
 		
 		try {
@@ -556,44 +559,58 @@ public class JobCandPanel extends JPanel {
 	
 	public void setDetail(String id){
 		String[] detail = cand.getDetail(id);
-		labelName.setText(detail[0]);
-		labelPhone.setText(detail[1]);
-		labelEmail.setText(detail[2]);
-		textPane.setText(detail[3]);
-		if(detail[4].equals("APPLICANT")){
-			comboBox.setSelectedIndex(0);
-		}else if(detail[4].equals("INTERVIEW")){
-			comboBox.setSelectedIndex(1);
-		}else  if(detail[4].equals("HIRED")){
-			comboBox.setSelectedIndex(2);
-		}
-		if(detail[5].equals("not Ready")){
-			comboBox_1.setSelectedIndex(0);
-		}else if(detail[5].equals("Ready")){
-			comboBox_1.setSelectedIndex(1);
-		}
-		if(!detail[6].equals(""))	
-		datePicker.getJFormattedTextField().setText(detail[6]);
-		System.out.println(
-				Integer.parseInt(detail[6].substring(0,4))+", "+
-				Integer.parseInt(detail[6].substring(5,7))+", "+ 
-				Integer.parseInt(detail[6].substring(8,10))+", "+
-				Integer.parseInt(detail[7].substring(0,2))+", "+
-				Integer.parseInt(detail[7].substring(3,5)));
+		
+		kand = new Kelas.Kandidat();
+		inter = new Kelas.Interview();
+		
+		kand.setNama(detail[0]);
+		kand.setPhone(detail[1]);
+		kand.setEmail(detail[2]);
+		kand.setAlamat(detail[3]);
+		kand.setGroup(detail[4]);
+		
+		inter.setTanggal(detail[5]);
+		inter.setJam_mulai(detail[6]);
+		inter.setJam_selesai(detail[7]);
+		inter.setDengan(detail[8]);
+		inter.setLokasi(detail[9]);
+		inter.setDeskripsi(detail[10]);
+		
+		labelName.setText(kand.getNama());
+		labelEmail.setText(kand.getEmail());
+		labelPhone.setText(kand.getPhone());
+		alamat.setText(kand.getAlamat());
 		
 		
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		try {
-			startSpinner.setValue(format.parseObject(detail[7]));
-			toSpinner_1.setValue(format.parseObject(detail[8]));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			startSpinner.setValue(format.parseObject(inter.getJam_mulai()));
+			toSpinner_1.setValue(format.parseObject(inter.getJam_mulai()));
+		} catch (Exception e) {
+			startSpinner.setValue(new Date());
+			toSpinner_1.setValue(new Date());
+			
 		}
 		
-		textField_2.setText(detail[9]);
-		textPane_2.setText(detail[10]);
-		textPane_1.setText(detail[11]);
+		try {
+			textField_2.setText(inter.getDengan());
+		} catch (Exception e) {
+			textField_2.setText("");
+		}
+		
+		try {
+			textPane_2.setText(inter.getLokasi());
+		} catch (Exception e) {
+			textPane_2.setText("");
+		}
+		
+		try {
+			textPane_1.setText(inter.getDeskripsi());
+		} catch (Exception e) {
+			textPane_1.setText("");
+		}
+		
+		
 	}
 	
 	public int showDialog(String title) {
@@ -624,10 +641,21 @@ public class JobCandPanel extends JPanel {
 	
 	public void openSetInterview(){
 		SetInterviewPanel sIP = new SetInterviewPanel();
+		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
+				Integer.parseInt(inter.getTanggal().substring(5,7)),
+				Integer.parseInt(inter.getTanggal().substring(8,10)));
+		sIP.setDesc(inter.getDeskripsi());
+		sIP.setLoc(inter.getLokasi());
+		
+		sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
+		
+		sIP.setWith(inter.getDengan());
 		
 		int response = sIP.showDialog("Set Interview"); //==============================
 		if(response == 0){
 			System.out.println("Save Set Interview");
+			DBConn.Interview inter = new DBConn.Interview();
+			inter.update(listId[table.getSelectedRow()], sIP.getTgl(), sIP.getTimeStart(), sIP.getTimeTo(), sIP.getWith(), sIP.getLoc(), sIP.getDesc());
 		}else{
 			System.out.println("Cancel");
 		}
