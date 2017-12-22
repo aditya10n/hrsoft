@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 05 Nov 2017 pada 00.53
--- Versi Server: 10.1.16-MariaDB
--- PHP Version: 7.0.9
+-- Generation Time: Dec 22, 2017 at 12:52 PM
+-- Server version: 10.1.19-MariaDB
+-- PHP Version: 5.6.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `interview`
+-- Table structure for table `interview`
 --
 
 CREATE TABLE `interview` (
@@ -41,14 +41,14 @@ CREATE TABLE `interview` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kandidat`
+-- Table structure for table `kandidat`
 --
 
 CREATE TABLE `kandidat` (
   `id_kandidat` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `id_pekerjaan` int(11) NOT NULL,
-  `status` varchar(25) NOT NULL,
+  `status` enum('not Confirmed','Confirmed') NOT NULL,
   `education` text,
   `experience` text,
   `grup` enum('APPLICANT','INTERVIEW','HIRED','DROP') NOT NULL,
@@ -59,17 +59,17 @@ CREATE TABLE `kandidat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `kandidat`
+-- Dumping data for table `kandidat`
 --
 
 INSERT INTO `kandidat` (`id_kandidat`, `username`, `id_pekerjaan`, `status`, `education`, `experience`, `grup`, `nama`, `phone`, `email`, `alamat`) VALUES
-(1, 'admin', 1, 'not Ready', NULL, NULL, 'APPLICANT', 'Aditya Nugraha', NULL, 'aditya10nugraha@gmail.com', NULL),
-(2, 'admin', 2, 'not Ready', NULL, NULL, 'INTERVIEW', 'Dini Badriani', '085695359496', 'dinibadrianis@gmail.com', 'CIMAHI');
+(1, 'admin', 1, 'not Confirmed', NULL, NULL, 'APPLICANT', 'Aditya Nugraha', NULL, 'aditya10nugraha@gmail.com', NULL),
+(2, 'admin', 2, 'not Confirmed', NULL, NULL, 'INTERVIEW', 'Dini Badriani', '085695359496', 'dinibadrianis@gmail.com', 'CIMAHI');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pekerjaan`
+-- Table structure for table `pekerjaan`
 --
 
 CREATE TABLE `pekerjaan` (
@@ -80,7 +80,7 @@ CREATE TABLE `pekerjaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pekerjaan`
+-- Dumping data for table `pekerjaan`
 --
 
 INSERT INTO `pekerjaan` (`id_pekerjaan`, `nama`, `lokasi`, `deskripsi`) VALUES
@@ -92,7 +92,7 @@ INSERT INTO `pekerjaan` (`id_pekerjaan`, `nama`, `lokasi`, `deskripsi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `staff`
+-- Table structure for table `staff`
 --
 
 CREATE TABLE `staff` (
@@ -103,7 +103,7 @@ CREATE TABLE `staff` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `staff`
+-- Dumping data for table `staff`
 --
 
 INSERT INTO `staff` (`username`, `password`, `nama`, `phone`) VALUES
@@ -160,17 +160,17 @@ ALTER TABLE `kandidat`
 ALTER TABLE `pekerjaan`
   MODIFY `id_pekerjaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `interview`
+-- Constraints for table `interview`
 --
 ALTER TABLE `interview`
   ADD CONSTRAINT `interview_ibfk_1` FOREIGN KEY (`id_kandidat`) REFERENCES `kandidat` (`id_kandidat`);
 
 --
--- Ketidakleluasaan untuk tabel `kandidat`
+-- Constraints for table `kandidat`
 --
 ALTER TABLE `kandidat`
   ADD CONSTRAINT `kandidat_ibfk_2` FOREIGN KEY (`id_pekerjaan`) REFERENCES `pekerjaan` (`id_pekerjaan`),

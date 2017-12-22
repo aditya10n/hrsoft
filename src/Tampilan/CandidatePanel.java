@@ -102,7 +102,7 @@ public class CandidatePanel extends JPanel {
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
 		status = new JComboBox();
-		status.setModel(new DefaultComboBoxModel(new String[] {"not Ready", "Ready"}));
+		status.setModel(new DefaultComboBoxModel(new String[] {"not Confirmed", "Confirmed"}));
 		panel_2.add(status, BorderLayout.CENTER);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
@@ -222,14 +222,7 @@ public class CandidatePanel extends JPanel {
 	}
 	
 	public void setStatus(String status){
-		int model=0;
-		if(status.equals("not Ready")){
-			model=0;
-		}else if(status.equals("Ready")){
-			model=1;
-		}
-		
-		this.status.setSelectedIndex(model);
+		this.status.setSelectedItem(status);
 	}
 	
 	public String getStatus(){

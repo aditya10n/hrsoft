@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import DBConn.Candidate;
+import Kelas.Interview;
 import Kelas.Kandidat;
 
 import java.awt.Font;
@@ -76,9 +77,9 @@ public class JobCandPanel extends JPanel {
 	private JTable table;
 	private DBConn.Candidate cand;
 	private JPanel panel_5;
-	private JTextField textField_2;
 	private JButton btnSetInter;
 	private String id;
+	JPanel panel_3;
 	
 	private JLabel label_2;
 	private JLabel label_1;
@@ -88,12 +89,17 @@ public class JobCandPanel extends JPanel {
 	private JLabel labelEmail;
 	private JTextPane alamat;
 	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 	private UtilDateModel model;
 	private JDatePanelImpl datePanel;
 	private JSpinner startSpinner;
 	private JSpinner toSpinner_1;
-	private JTextPane textPane_2;
-	private JTextPane textPane_1;
+	JLabel valueWith;
+	JLabel valueTo;
+	JLabel valueStart;
+	JTextPane valueLoc;
+	JTextPane valueDesc;
+	JLabel valueDate;
 	
 	Kelas.Kandidat kand;
 	Kelas.Interview inter;
@@ -183,7 +189,8 @@ public class JobCandPanel extends JPanel {
 		JPanel panel_2 = new JPanel();
 		panel_1.add(panel_2, BorderLayout.CENTER);
 		
-		JPanel panel_3 = new JPanel();
+		panel_3 = new JPanel();
+		panel_3.setVisible(false);
 		panel_3.setBorder(new CompoundBorder());
 		
 		JLabel lblName = new JLabel("Name");
@@ -225,22 +232,14 @@ public class JobCandPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!table.getValueAt(table.getSelectedRow(), 1).equals(comboBox.getSelectedItem().toString())){
-					System.out.println("Action !!");
 					cand.editGroup(listId[table.getSelectedRow()], comboBox.getSelectedItem().toString());
-					prepare(table, id);
+					table.setValueAt(comboBox.getSelectedItem(), table.getSelectedRow(), 1);
+					comboBox_1.setSelectedItem("not Confirmed");
+					setSumGroup(id);
 				}
 				
 			}
 		});
-		
-		btnSetInter = new JButton("Set Interview");
-		btnSetInter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openSetInterview();
-			}
-			
-		});
-		btnSetInter.setVisible(false);
 		
 		JButton btnDeleteCandidate = new JButton("Delete Candidate");
 		btnDeleteCandidate.addActionListener(new ActionListener() {
@@ -252,29 +251,35 @@ public class JobCandPanel extends JPanel {
 				}
 			}
 		});
+		
+		comboBox_1 = new JComboBox();
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"not Confirmed", "Confirmed"}));
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_3.createSequentialGroup()
-					.addContainerGap()
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblName)
-						.addComponent(lblEmail)
-						.addComponent(lblPhone)
-						.addComponent(lblAddress))
-					.addGap(41)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addComponent(labelName)
-						.addComponent(labelEmail)
-						.addComponent(labelPhone)
-						.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDeleteCandidate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnSetInter, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(gl_panel_3.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblName)
+								.addComponent(lblEmail)
+								.addComponent(lblPhone)
+								.addComponent(lblAddress))
+							.addGap(41)
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelName)
+								.addComponent(labelEmail)
+								.addComponent(labelPhone)
+								.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnDeleteCandidate, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+								.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(comboBox_1, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(comboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+						.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
 					.addContainerGap())
-				.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -296,17 +301,150 @@ public class JobCandPanel extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblAddress)
-								.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING, false)
 									.addGroup(gl_panel_3.createSequentialGroup()
-										.addComponent(btnDeleteCandidate)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(btnSetInter))
+										.addGap(5)
+										.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnDeleteCandidate))
 									.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
 					.addContainerGap())
 		);
+		
+		comboBox_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!table.getValueAt(table.getSelectedRow(), 2).equals(comboBox_1.getSelectedItem().toString())){
+					cand.editStatus(listId[table.getSelectedRow()], comboBox_1.getSelectedItem().toString());
+					table.setValueAt(comboBox_1.getSelectedItem(), table.getSelectedRow(), 2);
+				}
+				
+			}
+		});
+		
+		btnSetInter = new JButton("Set Interview");
+		btnSetInter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openSetInterview();
+			}
+			
+		});
+		btnSetInter.setVisible(false);
+		
+		JLabel lblDate = new JLabel("Date");
+		lblDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		valueDate = new JLabel("<Date>");
+		valueDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		JLabel lblTime = new JLabel("Time");
+		lblTime.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		JLabel lblStart = new JLabel("Start");
+		lblStart.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		JLabel lblTo = new JLabel("to");
+		lblTo.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		valueStart = new JLabel("<Start>");
+		
+		valueTo = new JLabel("<to>");
+		
+		JLabel lblWith = new JLabel("With");
+		lblWith.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		
+		valueWith = new JLabel("<With>");
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBorder(new TitledBorder(null, "Location", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		JPanel panel_7 = new JPanel();
+		panel_7.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
+		gl_panel_5.setHorizontalGroup(
+			gl_panel_5.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblDate)
+								.addGroup(gl_panel_5.createSequentialGroup()
+									.addGap(10)
+									.addComponent(valueDate)))
+							.addPreferredGap(ComponentPlacement.RELATED, 264, Short.MAX_VALUE)
+							.addComponent(btnSetInter, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblTime)
+								.addGroup(gl_panel_5.createSequentialGroup()
+									.addGap(10)
+									.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblStart)
+										.addComponent(lblTo))
+									.addGap(18)
+									.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+										.addComponent(valueTo)
+										.addComponent(valueStart))))
+							.addContainerGap(336, Short.MAX_VALUE))
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_5.createSequentialGroup()
+									.addGap(10)
+									.addComponent(valueWith))
+								.addComponent(lblWith))
+							.addContainerGap(380, Short.MAX_VALUE))))
+				.addGroup(Alignment.LEADING, gl_panel_5.createSequentialGroup()
+					.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+		);
+		gl_panel_5.setVerticalGroup(
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addComponent(lblDate)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(valueDate)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblTime)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblStart)
+						.addComponent(valueStart))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
+						.addComponent(valueTo)
+						.addComponent(lblTo))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblWith)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(valueWith)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addComponent(btnSetInter)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+		);
+		panel_7.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		panel_7.add(scrollPane_2, BorderLayout.CENTER);
+		
+		valueDesc = new JTextPane();
+		scrollPane_2.setViewportView(valueDesc);
+		panel_6.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_6.add(scrollPane_1, BorderLayout.CENTER);
+		
+		valueLoc = new JTextPane();
+		scrollPane_1.setViewportView(valueLoc);
+		panel_5.setLayout(gl_panel_5);
 		panel_3.setLayout(gl_panel_3);
 		
 		JPanel panel_4 = new JPanel();
@@ -357,149 +495,15 @@ public class JobCandPanel extends JPanel {
 				if(table.isColumnSelected(table.getSelectedColumn())){
 					setDetail(listId[table.getSelectedRow()]);
 					btnSetInter.setVisible(true);
+					panel_3.setVisible(true);
 				}
 				
 			}
 		});
 		
-		
 		model = new UtilDateModel();
 		datePanel = new JDatePanelImpl(model);
 		
-		JLabel lblTime = new JLabel("Time");
-		lblTime.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		
-		JLabel lblStart = new JLabel("Start");
-
-		
-		
-		JLabel lblTo = new JLabel("to");
-		
-		JLabel lblWith = new JLabel("With");
-		lblWith.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("Location");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		
-		JPanel panel_6 = new JPanel();
-		panel_6.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		
-		Date date = new Date();
-		  SpinnerDateModel sm = 
-		  new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
-		  startSpinner = new javax.swing.JSpinner(sm);
-		de = new JSpinner.DateEditor(startSpinner, "HH:mm");
-		startSpinner.setEditor(de);
-		
-		Date dateTo = new Date();
-		  SpinnerDateModel smTo = 
-		  new SpinnerDateModel(dateTo, null, null, Calendar.HOUR_OF_DAY);
-		  toSpinner_1 = new javax.swing.JSpinner(smTo);
-		deTo = new JSpinner.DateEditor(toSpinner_1, "HH:mm");
-		toSpinner_1.setEditor(deTo);
-		
-		JScrollPane scrollPane_2 = new JScrollPane();
-		
-		JLabel lblDate = new JLabel("Date");
-		lblDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		
-		JLabel lblZzz = new JLabel("zzz");
-		
-		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
-		gl_panel_5.setHorizontalGroup(
-			gl_panel_5.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_5.createSequentialGroup()
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addGap(20)
-							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(gl_panel_5.createSequentialGroup()
-									.addComponent(lblTo)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(toSpinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel_5.createSequentialGroup()
-									.addComponent(lblStart)
-									.addGap(18)
-									.addComponent(startSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 93, Short.MAX_VALUE))
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblTime))
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_5.createSequentialGroup()
-									.addGap(4)
-									.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
-								.addComponent(lblNewLabel))
-							.addGap(6))
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_5.createSequentialGroup()
-									.addGap(4)
-									.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED))
-								.addComponent(lblWith))
-							.addGap(6)))
-					.addGap(0)
-					.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_5.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblDate)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblZzz)
-					.addContainerGap(361, Short.MAX_VALUE))
-		);
-		gl_panel_5.setVerticalGroup(
-			gl_panel_5.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_5.createSequentialGroup()
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblDate)
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblZzz)))
-					.addGap(3)
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblTime)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblStart)
-								.addComponent(startSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
-								.addComponent(toSpinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblTo))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblWith)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
-						.addGroup(gl_panel_5.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-					.addContainerGap())
-		);
-		
-		textPane_2 = new JTextPane();
-		scrollPane_2.setViewportView(textPane_2);
-		panel_6.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_6.add(scrollPane_1, BorderLayout.CENTER);
-		
-		textPane_1 = new JTextPane();
-		scrollPane_1.setViewportView(textPane_1);
-		panel_5.setLayout(gl_panel_5);
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -537,12 +541,20 @@ public class JobCandPanel extends JPanel {
 		
 	}
 	
+	
+	public void setSumGroup(String id){
+		String[] sumGrup = cand.getSumGroup(id);
+		label_2.setText(sumGrup[0]);
+		label_1.setText(sumGrup[1]);
+		label.setText(sumGrup[2]);
+	}
+	
 	public void prepare(JTable tabel, String id){
 		cand = new Candidate();
 		listId = cand.listId(id);
 		
 		setTable(tabel, id);
-		String[] sumGrup = cand.getSumGroup(id);
+		setSumGroup(id);
 		
 		try {
 			for (int i=0;i<listId.length;i++){
@@ -552,9 +564,7 @@ public class JobCandPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "No Candidate(s)");
 		}
 		
-		label_2.setText(sumGrup[0]);
-		label_1.setText(sumGrup[1]);
-		label.setText(sumGrup[2]);
+		
 	}
 	
 	public void setDetail(String id){
@@ -564,50 +574,52 @@ public class JobCandPanel extends JPanel {
 		inter = new Kelas.Interview();
 		
 		kand.setNama(detail[0]);
-		kand.setPhone(detail[1]);
-		kand.setEmail(detail[2]);
+		kand.setEmail(detail[1]);
+		kand.setPhone(detail[2]);
 		kand.setAlamat(detail[3]);
 		kand.setGroup(detail[4]);
+		kand.setStatus(detail[5]);
 		
-		inter.setTanggal(detail[5]);
-		inter.setJam_mulai(detail[6]);
-		inter.setJam_selesai(detail[7]);
-		inter.setDengan(detail[8]);
-		inter.setLokasi(detail[9]);
-		inter.setDeskripsi(detail[10]);
+		inter.setTanggal(detail[6]);
+		inter.setJam_mulai(detail[7]);
+		inter.setJam_selesai(detail[8]);
+		inter.setDengan(detail[9]);
+		inter.setLokasi(detail[10]);
+		inter.setDeskripsi(detail[11]);
 		
 		labelName.setText(kand.getNama());
 		labelEmail.setText(kand.getEmail());
 		labelPhone.setText(kand.getPhone());
 		alamat.setText(kand.getAlamat());
 		
+		comboBox.setSelectedItem(kand.getGroup());
+		comboBox_1.setSelectedItem(kand.getStatus());
+		valueDate.setText(inter.getTanggal());
 		
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		try {
-			startSpinner.setValue(format.parseObject(inter.getJam_mulai()));
-			toSpinner_1.setValue(format.parseObject(inter.getJam_mulai()));
+			valueStart.setText(inter.getJam_mulai().substring(0,5));
+			valueTo.setText(inter.getJam_selesai().substring(0,5));
 		} catch (Exception e) {
-			startSpinner.setValue(new Date());
-			toSpinner_1.setValue(new Date());
-			
+			valueStart.setText("<Start>");
+			valueTo.setText("<to>");
 		}
 		
 		try {
-			textField_2.setText(inter.getDengan());
+			valueWith.setText(inter.getDengan());
 		} catch (Exception e) {
-			textField_2.setText("");
+			valueWith.setText("");
 		}
 		
 		try {
-			textPane_2.setText(inter.getLokasi());
+			valueLoc.setText(inter.getLokasi());
 		} catch (Exception e) {
-			textPane_2.setText("");
+			valueLoc.setText("");
 		}
 		
 		try {
-			textPane_1.setText(inter.getDeskripsi());
+			valueDesc.setText(inter.getDeskripsi());
 		} catch (Exception e) {
-			textPane_1.setText("");
+			valueDesc.setText("");
 		}
 		
 		
@@ -616,7 +628,7 @@ public class JobCandPanel extends JPanel {
 	public int showDialog(String title) {
 	      return JOptionPane.showOptionDialog(null, this, title,
 	            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
-	            new String[] { "OK", "Cancel" }, "OK");
+	            new String[] { "OK" }, "OK");
 	}
 	
 	public void setTable(JTable tabel, String id){
@@ -640,24 +652,52 @@ public class JobCandPanel extends JPanel {
 	
 	
 	public void openSetInterview(){
+		
 		SetInterviewPanel sIP = new SetInterviewPanel();
-		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
-				Integer.parseInt(inter.getTanggal().substring(5,7)),
-				Integer.parseInt(inter.getTanggal().substring(8,10)));
-		sIP.setDesc(inter.getDeskripsi());
-		sIP.setLoc(inter.getLokasi());
+		try {
+			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
+					Integer.parseInt(inter.getTanggal().substring(5,7)),
+					Integer.parseInt(inter.getTanggal().substring(8,10)));
+			sIP.setDesc(inter.getDeskripsi());
+			sIP.setLoc(inter.getLokasi());
+			sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
+			sIP.setWith(inter.getDengan());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
 		
-		sIP.setWith(inter.getDengan());
 		
 		int response = sIP.showDialog("Set Interview"); //==============================
 		if(response == 0){
 			System.out.println("Save Set Interview");
-			DBConn.Interview inter = new DBConn.Interview();
-			inter.update(listId[table.getSelectedRow()], sIP.getTgl(), sIP.getTimeStart(), sIP.getTimeTo(), sIP.getWith(), sIP.getLoc(), sIP.getDesc());
+			DBConn.Interview interC = new DBConn.Interview();
+			Kelas.Interview interN = new Interview();
+			
+			interN.setTanggal(sIP.getTgl());
+			interN.setJam_mulai(sIP.getTimeStart());
+			interN.setJam_selesai(sIP.getTimeTo());
+			interN.setDengan(sIP.getWith());
+			interN.setLokasi(sIP.getLoc());
+			interN.setDeskripsi(sIP.getDesc());
+			
+			if(inter.getDengan()==null && 
+					inter.getDeskripsi()==null &&
+					inter.getHasil()==null &&
+					inter.getId_interview()==null &&
+					inter.getJam_mulai()==null &&
+					inter.getJam_selesai()==null&&
+					inter.getLokasi()==null &&
+					inter.getTanggal()==null){
+				interC.add(listId[table.getSelectedRow()],interN);
+			}else{
+				interC.update(listId[table.getSelectedRow()],interN);
+			}
+			
+			
 		}else{
 			System.out.println("Cancel");
 		}
+		setDetail(listId[table.getSelectedRow()]);
 	}
 }

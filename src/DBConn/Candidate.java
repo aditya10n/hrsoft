@@ -1,5 +1,6 @@
 package DBConn;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -102,15 +103,28 @@ public class Candidate {
 	}
 	
 	public void deleteCandidate(String id_kandidat){
-		db = new DBSingle();
-		db.execute("DELETE from kandidat "
-				+ "WHERE id_kandidat='"+id_kandidat+"'");
+		try {
+			db = new DBSingle();
+			db.execute("DELETE from kandidat "
+					+ "WHERE id_kandidat='"+id_kandidat+"'");
+		} catch (Exception e) {
+			System.out.println("TANYA !!");
+			JOptionPane.showConfirmDialog(null, "really delete?");
+		}
+		
 	}
 	
 	public void editGroup(String id_kandidat, String group){
 		db= new DBSingle();
 		db.execute("UPDATE kandidat SET "
 				+ "grup='"+group+"' "
+				+ "WHERE id_kandidat='"+id_kandidat+"'");
+	}
+	
+	public void editStatus(String id_kandidat, String status){
+		db= new DBSingle();
+		db.execute("UPDATE kandidat SET "
+				+ "status='"+status+"' "
 				+ "WHERE id_kandidat='"+id_kandidat+"'");
 	}
 
