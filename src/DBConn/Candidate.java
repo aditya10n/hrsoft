@@ -10,7 +10,7 @@ public class Candidate {
 	SetConn conn;
 	DBSingle db;
 	
-	public DefaultTableModel jobCandTmodel(JTable table, String idPekerjaan){
+	public DefaultTableModel jobCandTmodel(String idPekerjaan){
 		
 		DefaultTableModel dm = new DefaultTableModel(){
 			private static final long serialVersionUID = 1L;
@@ -32,6 +32,32 @@ public class Candidate {
 		dm.setDataVector(ob,
 				new String[] { 
 			"NAME", "GROUP", "STATUS"
+			});
+		
+		return dm;
+		
+	}
+	
+public DefaultTableModel CandidateModel(){
+		
+		DefaultTableModel dm = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+		};
+		db = new DBSingle();
+		Object ob[][] = db.hasilStmt2(
+				"SELECT kandidat.nama, pekerjaan.nama, kandidat.grup, kandidat.status "
+					
+				+ "FROM kandidat, pekerjaan "
+				+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan");
+
+		dm.setDataVector(ob,
+				new String[] { 
+			"NAME", "JOB", "GROUP", "STATUS"
 			});
 		
 		return dm;
@@ -103,17 +129,10 @@ public class Candidate {
 	}
 	
 	public void deleteCandidate(String id_kandidat){
-		try {
 			db = new DBSingle();
 			db.execute("DELETE from kandidat "
 					+ "WHERE id_kandidat='"+id_kandidat+"'");
-		} catch (Exception e) {
-			System.out.println("TANYA !!");
-			JOptionPane.showConfirmDialog(null, "really delete?");
-		}
-		
 	}
-	
 	public void editGroup(String id_kandidat, String group){
 		db= new DBSingle();
 		db.execute("UPDATE kandidat SET "

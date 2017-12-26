@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
@@ -43,8 +44,8 @@ public class SetInterviewPanel extends JPanel {
 	private JDatePanelImpl datePanel;
 	private JDatePickerImpl datePicker;
 	private JTextField textField;
-	JTextPane textPane;
-	JTextPane textPane_1;
+	JTextArea textPane;
+	JTextArea textPane_1;
 	JSpinner spinner;
 	JSpinner spinner_1;
 	JSpinner.DateEditor de,deTo;
@@ -122,14 +123,14 @@ public class SetInterviewPanel extends JPanel {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_4.add(scrollPane_1, BorderLayout.CENTER);
 		
-		textPane_1 = new JTextPane();
+		textPane_1 = new JTextArea();
 		scrollPane_1.setViewportView(textPane_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
-		textPane = new JTextPane();
+		textPane = new JTextArea();
 		scrollPane.setViewportView(textPane);
 		panel_3.setLayout(new BorderLayout(0, 0));
 		//scrollPane.setViewportView(textPane);

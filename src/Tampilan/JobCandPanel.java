@@ -97,8 +97,8 @@ public class JobCandPanel extends JPanel {
 	JLabel valueWith;
 	JLabel valueTo;
 	JLabel valueStart;
-	JTextPane valueLoc;
-	JTextPane valueDesc;
+	JTextArea valueLoc;
+	JTextArea valueDesc;
 	JLabel valueDate;
 	
 	Kelas.Kandidat kand;
@@ -435,14 +435,14 @@ public class JobCandPanel extends JPanel {
 		JScrollPane scrollPane_2 = new JScrollPane();
 		panel_7.add(scrollPane_2, BorderLayout.CENTER);
 		
-		valueDesc = new JTextPane();
+		valueDesc = new JTextArea();
 		scrollPane_2.setViewportView(valueDesc);
 		panel_6.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_6.add(scrollPane_1, BorderLayout.CENTER);
 		
-		valueLoc = new JTextPane();
+		valueLoc = new JTextArea();
 		scrollPane_1.setViewportView(valueLoc);
 		panel_5.setLayout(gl_panel_5);
 		panel_3.setLayout(gl_panel_3);
@@ -646,7 +646,7 @@ public class JobCandPanel extends JPanel {
 	
 	public DefaultTableModel setTableMod(JTable tabel, String id){
 		cand = new Candidate();
-		DefaultTableModel dm = cand.jobCandTmodel(table, id);
+		DefaultTableModel dm = cand.jobCandTmodel(id);
 		return dm;
 	}
 	

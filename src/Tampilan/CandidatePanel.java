@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
@@ -28,8 +29,8 @@ public class CandidatePanel extends JPanel {
 	JTextPane alamat;
 	JComboBox group;
 	JComboBox status;
-	JTextPane textPaneExp;
-	JTextPane textPaneEdu;
+	JTextArea textPaneExp;
+	JTextArea textPaneEdu;
 		
 	
 	/**
@@ -90,14 +91,14 @@ public class CandidatePanel extends JPanel {
 		JScrollPane scrollPane_2 = new JScrollPane();
 		panel_4.add(scrollPane_2, BorderLayout.CENTER);
 		
-		textPaneExp = new JTextPane();
+		textPaneExp = new JTextArea();
 		scrollPane_2.setViewportView(textPaneExp);
 		panel_3.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_3.add(scrollPane_1, BorderLayout.CENTER);
 		
-		textPaneEdu = new JTextPane();
+		textPaneEdu = new JTextArea();
 		scrollPane_1.setViewportView(textPaneEdu);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
