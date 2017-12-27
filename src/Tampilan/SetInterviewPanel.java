@@ -49,8 +49,6 @@ public class SetInterviewPanel extends JPanel {
 	JSpinner spinner;
 	JSpinner spinner_1;
 	JSpinner.DateEditor de,deTo;
-	
-	JComboBox comboBox;
 	/**
 	 * Create the panel.
 	 */
@@ -70,9 +68,6 @@ public class SetInterviewPanel extends JPanel {
 		datePicker.setBackground(new Color(255, 255, 153));
 		
 		panel.add(datePicker);
-		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"not Ready", "Ready"}));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -96,18 +91,12 @@ public class SetInterviewPanel extends JPanel {
 						.addComponent(panel_2, 0, 0, Short.MAX_VALUE)
 						.addComponent(datePicker, GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
+					.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addComponent(datePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
@@ -255,16 +244,5 @@ public class SetInterviewPanel extends JPanel {
 	}
 	
 	
-	public void setStatus(String status){
-		if(status.equals("not Ready")){
-			comboBox.setSelectedIndex(0);
-		}else if(status.equals("Ready")){
-			comboBox.setSelectedIndex(1);
-		}
-	}
-	
-	public String getStatus(){
-		return comboBox.getItemAt(comboBox.getSelectedIndex()).toString();
-	}
 	
 }

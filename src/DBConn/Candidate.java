@@ -9,6 +9,7 @@ import Kelas.Kandidat;
 public class Candidate {
 	SetConn conn;
 	DBSingle db;
+	Kandidat kand = new Kandidat(); 
 	
 	public DefaultTableModel jobCandTmodel(String idPekerjaan){
 		
@@ -50,7 +51,10 @@ public DefaultTableModel CandidateModel(){
 		};
 		db = new DBSingle();
 		Object ob[][] = db.hasilStmt2(
-				"SELECT kandidat.nama, pekerjaan.nama, kandidat.grup, kandidat.status "
+				"SELECT kandidat.nama, pekerjaan.nama, kandidat.grup, kandidat.status,"
+				+ "(SELECT COUNT(kandidat.nama) "
+				+ "FROM kandidat, pekerjaan "
+				+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan) AS COUNT "
 					
 				+ "FROM kandidat, pekerjaan "
 				+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan");
@@ -63,6 +67,35 @@ public DefaultTableModel CandidateModel(){
 		return dm;
 		
 	}
+
+public DefaultTableModel CandidateModel(String group){
+	
+	DefaultTableModel dm = new DefaultTableModel(){
+		private static final long serialVersionUID = 1L;
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+		
+	};
+	db = new DBSingle();
+	Object ob[][] = db.hasilStmt2(
+			"SELECT kandidat.nama, pekerjaan.nama, kandidat.status,"
+			+ "(SELECT COUNT(kandidat.nama) "
+			+ "FROM kandidat, pekerjaan "
+			+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan) AS COUNT "
+				
+			+ "FROM kandidat, pekerjaan "
+			+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan AND kandidat.grup='"+group+"'");
+
+	dm.setDataVector(ob,
+			new String[] { 
+		"NAME", "JOB", "STATUS"
+		});
+	
+	return dm;
+	
+}
 	
 	public String[] getSumGroup(String idJob){
 		String[] hasil;
@@ -90,6 +123,25 @@ public DefaultTableModel CandidateModel(){
 		return hasil;
 	}
 	
+	public String[] listId(){
+		String[] hasil=null;
+		db = new DBSingle();
+			hasil = db.hasilStmtV("SELECT kandidat.id_kandidat, "
+					+ "(select COUNT(kandidat.id_kandidat) "
+					+ "from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan)AS COUNT "
+					+ "from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan");
+		return hasil;
+	}
+	public String[] listIdP(){
+		String[] hasil=null;
+		db = new DBSingle();
+			hasil = db.hasilStmtV("SELECT id_pekerjaan, "
+					+ "(select COUNT(id_pekerjaan) "
+					+ "from kandidat)AS COUNT "
+					+ "from kandidat");
+		return hasil;
+	}
+	
 	public String[] getDetail(String id){
 		String[] hasil=null;
 		
@@ -111,6 +163,33 @@ public DefaultTableModel CandidateModel(){
 		return hasil;
 	}
 	
+	public Kandidat getDetailG(String id){
+		String[] hasil=null;
+		
+		db = new DBSingle();
+		hasil = db.hasilStmtH("SELECT nama AS NAME, "
+				+ "email AS EMAIL, "
+				+ "phone AS PHONE, "
+				+ "alamat AS ADDRESS, "
+				+ "grup AS 'GROUP',"
+				+ "status as 'STATUS',"
+				+ "education as 'EDUCATION',"
+				+ "experience as 'EXPRERIENCE'"
+				+ " from kandidat"
+				+ " WHERE id_kandidat='"+id+"'");
+		
+		kand.setNama(hasil[0]);
+		kand.setEmail(hasil[1]);
+		kand.setPhone(hasil[2]);
+		kand.setAlamat(hasil[3]);
+		kand.setGroup(hasil[4]);
+		kand.setStatus(hasil[5]);
+		kand.setEducation(hasil[6]);
+		kand.setExperience(hasil[7]);
+		
+		return kand;
+	}
+	
 	public void addCandidate(Kandidat kan, String username, String id_pekerjaan){
 		db = new DBSingle();
 		db.execute("INSERT into kandidat VALUES("
@@ -126,6 +205,23 @@ public DefaultTableModel CandidateModel(){
 				+ "'"+kan.getEmail()+"',"
 				+ "'"+kan.getAlamat()+"'"
 				+ ")");
+	}
+	
+	public void editCandidate(Kandidat kan, String username, String id_pekerjaan){
+		db = new DBSingle();
+		db.execute("UPDATE kandidat "
+				+ "SET "
+				+ "username='"+username+"',"
+				+ "id_pekerjaan='"+id_pekerjaan+"',"
+				+ "status='"+kan.getStatus()+"',"
+				+ "education='"+kan.getEducation()+"',"
+				+ "experience='"+kan.getExperience()+"',"
+				+ "grup='"+kan.getGroup()+"',"
+				+ "nama='"+kan.getNama()+"',"
+				+ "phone='"+kan.getPhone()+"',"
+				+ "email='"+kan.getEmail()+"',"
+				+ "alamat='"+kan.getAlamat()+"'"
+				+ " WHERE id_kandidat='"+kan.getId_kandidat()+"'");
 	}
 	
 	public void deleteCandidate(String id_kandidat){

@@ -214,10 +214,6 @@ public class JobCandPanel extends JPanel {
 		labelPhone = new JLabel("<Phone>");
 		labelPhone.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
-		alamat = new JTextPane();
-		alamat.setEditable(false);
-		alamat.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		
 		panel_5 = new JPanel();
 		panel_5.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Set Interview", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		//panel_5.setVisible(false);
@@ -247,18 +243,21 @@ public class JobCandPanel extends JPanel {
 				int result = JOptionPane.showConfirmDialog(null, "Delete Candidate :"+table.getValueAt( table.getSelectedRow(),0)+"?");
 				if(result == 0){
 					cand.deleteCandidate(listId[table.getSelectedRow()]);
-					prepare(table, id);
+					
 				}
+				prepare(table, id);
 			}
 		});
 		
 		comboBox_1 = new JComboBox();
 		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"not Confirmed", "Confirmed"}));
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_3.createSequentialGroup()
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_3.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -271,13 +270,12 @@ public class JobCandPanel extends JPanel {
 								.addComponent(labelName)
 								.addComponent(labelEmail)
 								.addComponent(labelPhone)
-								.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnDeleteCandidate, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-								.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(comboBox_1, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(comboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnDeleteCandidate, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -297,22 +295,26 @@ public class JobCandPanel extends JPanel {
 							.addGap(6)
 							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelPhone)
-								.addComponent(lblPhone))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblAddress)
-								.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING, false)
-									.addGroup(gl_panel_3.createSequentialGroup()
-										.addGap(5)
-										.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnDeleteCandidate))
-									.addComponent(alamat, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(lblPhone)))
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblAddress)
+						.addGroup(gl_panel_3.createSequentialGroup()
+							.addGap(5)
+							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+							.addComponent(btnDeleteCandidate))
+						.addComponent(scrollPane_3, GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
 					.addContainerGap())
 		);
+		
+		alamat = new JTextPane();
+		scrollPane_3.setViewportView(alamat);
+		alamat.setEditable(false);
+		alamat.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		
 		comboBox_1.addActionListener(new ActionListener() {
 			

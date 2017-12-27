@@ -57,7 +57,7 @@ public class Jobs extends JFrame {
 	private JButton btnSelect;
 	private JButton btnEdit;
 	private JButton btnDelete;
-
+	private JButton btnAddCandidate;
 	/**
 	 * Launch the application.
 	 */
@@ -182,14 +182,14 @@ public class Jobs extends JFrame {
 		});
 		btnDelete.setVisible(false);
 		
-		JButton btnAddCandidate = new JButton("Add Candidate");
+		btnAddCandidate = new JButton("Add Candidate");
+		btnAddCandidate.setVisible(false);
 		btnAddCandidate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CandidatePanel cp = new CandidatePanel();
 				
 				int response = cp.showDialog("Add Candidate job "); //==============================
 				if(response == 0){
-					System.out.println("Save candidate");
 					Kandidat kan = new Kandidat();
 					kan.setStatus(cp.getStatus());
 					kan.setEducation(cp.getEdu());
@@ -204,7 +204,7 @@ public class Jobs extends JFrame {
 					cand.addCandidate(kan, "admin", listId[table.getSelectedRow()]);
 					preTable();
 				}else{
-					System.out.println("Cancel");
+					
 				}
 			}
 		});
@@ -266,8 +266,8 @@ public class Jobs extends JFrame {
 					btnSelect.setVisible(true);
 					btnEdit.setVisible(true);
 					btnDelete.setVisible(true);
-					/*System.out.println(listId[table.getSelectedRow()]+", "+table.getSelectedRow()+", "+table.getSelectedColumn()+", "
-					+table.getValueAt(table.getSelectedRow(), table.getSelectedColumn())); */
+					btnAddCandidate.setVisible(true);
+					
 				}
 			}
 		});
@@ -280,6 +280,10 @@ public class Jobs extends JFrame {
 	}
 	
 	public void preTable(){
+		btnAddCandidate.setVisible(false);
+		btnDelete.setVisible(false);
+		btnEdit.setVisible(false);
+		btnSelect.setVisible(false);
 		table.setModel(preTableMod());
 		DefaultTableCellRenderer center = new DefaultTableCellRenderer();
 		center.setHorizontalAlignment(SwingConstants.CENTER);
@@ -309,7 +313,6 @@ public class Jobs extends JFrame {
 			job.createJob(jp.getName(), jp.getLoc(), jp.getDesc());
 			preTable();
 		}else{
-			System.out.println("Cancel");
 		}
 	}
 	
@@ -329,7 +332,6 @@ public class Jobs extends JFrame {
 			job.editJob(pk);
 			preTable();
 		}else{
-			System.out.println("Cancel");
 		}
 	}
 	
@@ -340,10 +342,9 @@ public class Jobs extends JFrame {
 			btnSelect.setVisible(false);
 			btnEdit.setVisible(false);
 			btnDelete.setVisible(false);
-			
+			btnAddCandidate.setVisible(false);
 			preTable();
 		}else{
-			System.out.println("Cancel");
 		}
 	}
 	

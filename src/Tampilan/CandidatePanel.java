@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 import javax.swing.UIManager;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -110,7 +112,7 @@ public class CandidatePanel extends JPanel {
 		group = new JComboBox();
 		group.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
 		panel_1.add(group, BorderLayout.CENTER);
-		
+				
 		JLabel lblNama = new JLabel("Nama");
 		
 		JLabel lblPhone = new JLabel("Phone");
@@ -180,6 +182,25 @@ public class CandidatePanel extends JPanel {
 	      return JOptionPane.showOptionDialog(null, this, title,
 	            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 	            new String[] { "OK", "Cancel" }, "OK");
+	}
+	
+	public void detail(){
+		fieldNama.setEditable(false);
+		fieldEmail.setEditable(false);
+		fieldPhone.setEditable(false);
+		alamat.setEditable(false);
+		textPaneEdu.setEditable(false);
+		textPaneExp.setEditable(false);
+	}
+	
+	public void edit(){
+		fieldNama.setEditable(true);
+		fieldEmail.setEditable(true);
+		fieldPhone.setEditable(true);
+		alamat.setEditable(true);
+		textPaneEdu.setEditable(true);
+		textPaneExp.setEditable(true);
+		
 	}
 	
 	public void setNama(String nama){

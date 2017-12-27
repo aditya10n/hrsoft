@@ -2,6 +2,7 @@
 package Tampilan;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -42,11 +43,11 @@ public class Home_main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JDesktopPane desktopPane;
-	private JInternalFrame internalFrame;
+	private JInternalFrame internalFrame = new JInternalFrame();
 	private JButton btnDataJob;
 	private JButton btnCandidates;
 	private JButton btnApplicant;
-	private JCheckBox chckbxCandidates;
+	private JCheckBox chckbxGroup;
 	private JCheckBox chckbxDataMaster;
 	private JButton btnElist;
 	private JButton btnHired;
@@ -61,6 +62,8 @@ public class Home_main extends JFrame {
 	private JLabel label;
 	private JLabel lblNama;
 	private JButton btnEfinished;
+	Jobs jobs = new Jobs();
+	Candidates cand = new Candidates();
 
 	/**
 	 * Launch the application.
@@ -121,7 +124,7 @@ public class Home_main extends JFrame {
 		panel_4.add(panel_1, BorderLayout.WEST);
 		panel_1.setBackground(new Color(153, 255, 153));
 		
-		chckbxDataMaster = new JCheckBox("Data Master");
+		chckbxDataMaster = new JCheckBox("DATA MASTER");
 		chckbxDataMaster.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		chckbxDataMaster.setSelected(true);
 		chckbxDataMaster.setBorderPainted(true);
@@ -131,7 +134,7 @@ public class Home_main extends JFrame {
 		btnDataJob.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnDataJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getCover();
+				getJobs();
 			}
 		});
 		
@@ -139,20 +142,20 @@ public class Home_main extends JFrame {
 		btnCandidates.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnCandidates.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		//		getDataPOS();
+				getCandidates();
 			}
 		});
 		
-		chckbxCandidates = new JCheckBox("CANDIDATES");
-		chckbxCandidates.setFont(new Font("Times New Roman", Font.BOLD, 11));
-		chckbxCandidates.setBorderPaintedFlat(true);
-		chckbxCandidates.setBorderPainted(true);
+		chckbxGroup = new JCheckBox("GROUP");
+		chckbxGroup.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		chckbxGroup.setBorderPaintedFlat(true);
+		chckbxGroup.setBorderPainted(true);
 		
 		btnApplicant = new JButton("APPLICANT");
 		btnApplicant.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnApplicant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		//		getPenimbanganSemua();
+				getCandidateApplicant();
 			}
 		});
 		
@@ -160,7 +163,7 @@ public class Home_main extends JFrame {
 		btnInterview.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnInterview.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		//		getPenimbanganPerbulan();
+				getCandidateInterview();
 			}
 		});
 		
@@ -168,7 +171,7 @@ public class Home_main extends JFrame {
 		btnHired.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnHired.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		//		getPenimbanganPerposyandu();
+				getCandidateHired();
 			}
 		});
 		
@@ -183,16 +186,33 @@ public class Home_main extends JFrame {
 		btnElist.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnElist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		//		getLaporanPerbulan();
+				getListInterview();
 			}
 		});
 		
 		btnEtoday = new JButton("TODAY");
+		btnEtoday.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getListInterviewToday();
+			}
+		});
 		btnEtoday.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		
 		btnElater = new JButton("LATER");
+		btnElater.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getListInterviewLater();
+			}
+		});
+		
 		btnElater.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnEmissed = new JButton("MISSED");
+		btnEmissed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getListInterviewMissed();
+			}
+		});
+		
 		btnEmissed.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnNewButton = new JButton("Logout");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -205,6 +225,12 @@ public class Home_main extends JFrame {
 		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		btnEfinished = new JButton("FINISHED");
+		btnEfinished.setVisible(false);
+		btnEfinished.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getListInterviewFinish();
+			}
+		});
 		btnEfinished.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
@@ -219,7 +245,7 @@ public class Home_main extends JFrame {
 						.addComponent(chckbxDataMaster, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 						.addComponent(btnDataJob, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 						.addComponent(btnCandidates, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(chckbxCandidates, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(chckbxGroup, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 						.addComponent(btnApplicant, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 						.addComponent(btnInterview, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 						.addComponent(btnHired, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
@@ -241,7 +267,7 @@ public class Home_main extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnCandidates)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(chckbxCandidates)
+					.addComponent(chckbxGroup)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnApplicant)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -317,15 +343,9 @@ public class Home_main extends JFrame {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
+			public void mouseEntered(MouseEvent e) {}@Override
+			public void mouseExited(MouseEvent e) {}@Override
+			public void mousePressed(MouseEvent e) {}@Override
 			public void mouseReleased(MouseEvent e) {}
 		});
 		
@@ -333,10 +353,10 @@ public class Home_main extends JFrame {
 		btnApplicant.setVisible(false);
 		btnInterview.setVisible(false);
 		btnHired.setVisible(false);
-		chckbxCandidates.addMouseListener(new MouseListener() {
+		chckbxGroup.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(chckbxCandidates.isSelected()){
+				if(chckbxGroup.isSelected()){
 					btnApplicant.setVisible(true);
 					btnInterview.setVisible(true);
 					btnHired.setVisible(true);
@@ -350,15 +370,9 @@ public class Home_main extends JFrame {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
+			public void mouseEntered(MouseEvent e) {}@Override
+			public void mouseExited(MouseEvent e) {}@Override
+			public void mousePressed(MouseEvent e) {}@Override
 			public void mouseReleased(MouseEvent e) {}
 		});
 		
@@ -386,19 +400,12 @@ public class Home_main extends JFrame {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-
-			@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
 			public void mouseReleased(MouseEvent arg0) {}
 		});
-		
-		//getCover();
+		getCover();
 	}
 	
 	/*
@@ -416,84 +423,73 @@ public class Home_main extends JFrame {
 	private void getCover() {
 		desktopPane.removeAll();
 		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Jobs", false, false);
-		Jobs db = new Jobs();
-		internalFrame.setContentPane(db.getContentPane());
+		internalFrame.setContentPane(jobs.getContentPane());
+		internalFrame.setTitle("Jobs");
 		desktopPane.add(internalFrame);
 		internalFrame.setVisible(true);
 		
 	}
-	/*
-	protected void getUserMaster() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Balita", false, false);
-		DataUser db = new DataUser();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
-	}
-
-	protected void getPenimbanganPerposyandu() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Penimbangan Posyandu", false, false);
-		PenimbanganPerposyandu db = new PenimbanganPerposyandu();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
-	}
-
-	protected void getMasterPenimbangan() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Penimbangan", false, false);
-		DataPenimbangan dp = new DataPenimbangan();
-		internalFrame.setContentPane(dp.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
-		dp.setIdTPG(lblIdtpg.getText());
-	}
-
-	public void getDataBalita() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Balita", false, false);
-		DataBalita db = new DataBalita();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
+	
+	private void getCandidates(){
+		internalFrame.setContentPane(cand.getContentPane());
+		cand.prepare();
+		internalFrame.setTitle("Candidate");
 	}
 	
-	public void getDataPOS() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Posyandu", false, false);
-		DataPOS db = new DataPOS();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
+	private void getJobs(){
+		internalFrame.setContentPane(jobs.getContentPane());
+		internalFrame.setTitle("Jobs");
+		jobs.preTable();
 	}
 	
-	public void getPenimbanganSemua() {
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Semua Penimbangan", false, false);
-		PenimbanganSemua db = new PenimbanganSemua();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
+	private void getCandidateApplicant(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Group Applicant");
+		cand.prepare("APPLICANT");
 	}
 	
-	public void getPenimbanganPerbulan(){
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Data Penimbangan Perbulan", false, false);
-		PenimbanganPerbulan db = new PenimbanganPerbulan();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
+	private void getCandidateInterview(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Group Interview");
+		cand.prepare("INTERVIEW");
 	}
-	*/
+	
+	private void getCandidateHired(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Group Hired");
+		cand.prepare("HIRED");
+	}
+	
+	private void getListInterview(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("List Interview");
+		cand.prepare("HIRED");
+	}
+	
+	private void getListInterviewToday(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Interview Today");
+		cand.prepare("HIRED");
+	}
+	
+	private void getListInterviewLater(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Interview Later");
+		cand.prepare("HIRED");
+	}
+	
+	private void getListInterviewMissed(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Interview Missed");
+		cand.prepare("HIRED");
+	}
+	
+	private void getListInterviewFinish(){
+		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setTitle("Interview Finished");
+		cand.prepare("HIRED");
+	}
+	
 	
 	public void setId(String s){
 		this.lbluser.setText(s);

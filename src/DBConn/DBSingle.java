@@ -65,7 +65,6 @@ public class DBSingle {
 				
 				for(int i=1;i<rsmd.getColumnCount();i++){
 					hasil[x][i-1]=rs.getString(i);
-					System.out.println(hasil[x][i-1]);
 				}
 				x++;
 			}while(rs.next());
@@ -98,7 +97,6 @@ public class DBSingle {
 				
 				for(int i=1;i<rsmd.getColumnCount();i++){
 					hasil[x]=rs.getString(i);
-					System.out.println(hasil[x]);
 				}
 				x++;
 			}while(rs.next());
@@ -130,7 +128,6 @@ public class DBSingle {
 				
 				for(int i=1;x<hasil.length;i++){
 					hasil[x]=rs.getString(i);
-					System.out.println(hasil[x]);
 					x++;
 				}
 				
