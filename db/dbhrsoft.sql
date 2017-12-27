@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 22, 2017 at 12:52 PM
--- Server version: 10.1.19-MariaDB
--- PHP Version: 5.6.28
+-- Generation Time: 27 Des 2017 pada 23.08
+-- Versi Server: 10.1.16-MariaDB
+-- PHP Version: 7.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,32 +23,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `interview`
+-- Struktur dari tabel `interview`
 --
 
 CREATE TABLE `interview` (
   `id_interview` int(11) NOT NULL,
   `id_kandidat` int(11) NOT NULL,
-  `tanggal` date DEFAULT NULL,
-  `jam_mulai` time DEFAULT NULL,
-  `jam_selesai` time DEFAULT NULL,
-  `dengan` varchar(255) DEFAULT NULL,
-  `lokasi` text,
-  `deskripsi` text,
-  `hasil` text
+  `tanggal` date NOT NULL,
+  `jam_mulai` time NOT NULL,
+  `jam_selesai` time NOT NULL,
+  `dengan` varchar(255) NOT NULL,
+  `lokasi` text NOT NULL,
+  `deskripsi` text NOT NULL,
+  `hasil` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kandidat`
+-- Struktur dari tabel `kandidat`
 --
 
 CREATE TABLE `kandidat` (
   `id_kandidat` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `id_pekerjaan` int(11) NOT NULL,
-  `status` enum('not Confirmed','Confirmed') NOT NULL,
+  `status` enum('not Ready','Ready') NOT NULL,
   `education` text,
   `experience` text,
   `grup` enum('APPLICANT','INTERVIEW','HIRED','DROP') NOT NULL,
@@ -59,17 +59,18 @@ CREATE TABLE `kandidat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `kandidat`
+-- Dumping data untuk tabel `kandidat`
 --
 
 INSERT INTO `kandidat` (`id_kandidat`, `username`, `id_pekerjaan`, `status`, `education`, `experience`, `grup`, `nama`, `phone`, `email`, `alamat`) VALUES
-(1, 'admin', 1, 'not Confirmed', NULL, NULL, 'APPLICANT', 'Aditya Nugraha', NULL, 'aditya10nugraha@gmail.com', NULL),
-(2, 'admin', 2, 'not Confirmed', NULL, NULL, 'INTERVIEW', 'Dini Badriani', '085695359496', 'dinibadrianis@gmail.com', 'CIMAHI');
+(1, 'admin', 1, 'not Ready', NULL, NULL, 'APPLICANT', 'Aditya Nugraha', NULL, 'aditya10nugraha@gmail.com', NULL),
+(2, 'admin', 2, 'not Ready', NULL, NULL, 'APPLICANT', 'Dini Badriani', '085695359496', 'dinibadrianis@gmail.com', 'CIMAHI'),
+(5, 'admin', 4, 'not Ready', 'asgewsdf', 'kfsaas', 'APPLICANT', 'Suhendra', '0251-86298782', 'hendrahendra@yahoo.co.id', 'Jl Sekeloa Barat No.25');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pekerjaan`
+-- Struktur dari tabel `pekerjaan`
 --
 
 CREATE TABLE `pekerjaan` (
@@ -80,19 +81,19 @@ CREATE TABLE `pekerjaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `pekerjaan`
+-- Dumping data untuk tabel `pekerjaan`
 --
 
 INSERT INTO `pekerjaan` (`id_pekerjaan`, `nama`, `lokasi`, `deskripsi`) VALUES
 (1, 'Junior Programmer', ' ', ' '),
 (2, 'Senior Programmer', '', ''),
 (4, 'Office Boy', 'Jalan Kopo No.24', 'Lulusan SMA/SMK\nUmur Maks 30 Tahun'),
-(5, 'Accountant Finance', 'Istana Pasteur Regency Cicendo', 'Fresh Gradyate are welcome\nRequired Skill(s) : Microsoft Office, Microsoft Project, Administration, Accountant, Finance, Tax');
+(5, 'Accountant Finance', 'Istana Pasteur Regency Cicendo', 'Fresh Gradyate are welcome\nRequired Skill(s) : Microsoft Office, \nMicrosoft Project, \nAdministration, \nAccountant, \nFinance, \nTax');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `staff`
+-- Struktur dari tabel `staff`
 --
 
 CREATE TABLE `staff` (
@@ -103,7 +104,7 @@ CREATE TABLE `staff` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `staff`
+-- Dumping data untuk tabel `staff`
 --
 
 INSERT INTO `staff` (`username`, `password`, `nama`, `phone`) VALUES
@@ -148,33 +149,33 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `interview`
 --
 ALTER TABLE `interview`
-  MODIFY `id_interview` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_interview` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `kandidat`
 --
 ALTER TABLE `kandidat`
-  MODIFY `id_kandidat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_kandidat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `pekerjaan`
 --
 ALTER TABLE `pekerjaan`
   MODIFY `id_pekerjaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `interview`
+-- Ketidakleluasaan untuk tabel `interview`
 --
 ALTER TABLE `interview`
-  ADD CONSTRAINT `interview_ibfk_1` FOREIGN KEY (`id_kandidat`) REFERENCES `kandidat` (`id_kandidat`);
+  ADD CONSTRAINT `interview_ibfk_1` FOREIGN KEY (`id_kandidat`) REFERENCES `kandidat` (`id_kandidat`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `kandidat`
+-- Ketidakleluasaan untuk tabel `kandidat`
 --
 ALTER TABLE `kandidat`
-  ADD CONSTRAINT `kandidat_ibfk_2` FOREIGN KEY (`id_pekerjaan`) REFERENCES `pekerjaan` (`id_pekerjaan`),
-  ADD CONSTRAINT `kandidat_ibfk_3` FOREIGN KEY (`username`) REFERENCES `staff` (`username`);
+  ADD CONSTRAINT `kandidat_ibfk_2` FOREIGN KEY (`id_pekerjaan`) REFERENCES `pekerjaan` (`id_pekerjaan`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `kandidat_ibfk_3` FOREIGN KEY (`username`) REFERENCES `staff` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
