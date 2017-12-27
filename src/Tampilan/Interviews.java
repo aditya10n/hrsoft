@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -248,13 +250,17 @@ public class Interviews extends JFrame {
 		Kelas.Interview inter = new Kelas.Interview();
 		this.inter = new DBConn.Interview();
 		inter = this.inter.getDataFK(id);
-		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
-				Integer.parseInt(inter.getTanggal().substring(5,7)),
-				Integer.parseInt(inter.getTanggal().substring(8,10)));
+		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0,2)),
+				Integer.parseInt(inter.getTanggal().substring(3,5)),
+				Integer.parseInt(inter.getTanggal().substring(6, 10)));
 		sIP.setDesc(inter.getDeskripsi());
 		sIP.setLoc(inter.getLokasi());
 		sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
 		sIP.setWith(inter.getDengan());
+		
+		sIP.textField.setEditable(false);
+		sIP.textPane.setEditable(false);
+		sIP.textPane_1.setEditable(false);
 		sIP.showDialog("Set Interview"); 
 		
 		sIP.setEnabled(false);
@@ -266,9 +272,9 @@ public class Interviews extends JFrame {
 		Kelas.Interview inter = new Kelas.Interview();
 		this.inter = new DBConn.Interview();
 		inter = this.inter.getDataFK(id);
-		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
-				Integer.parseInt(inter.getTanggal().substring(5,7)),
-				Integer.parseInt(inter.getTanggal().substring(8,10)));
+		sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0,2)),
+				Integer.parseInt(inter.getTanggal().substring(3,5)),
+				Integer.parseInt(inter.getTanggal().substring(6, 10)));
 		sIP.setDesc(inter.getDeskripsi());
 		sIP.setLoc(inter.getLokasi());
 		sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());

@@ -399,7 +399,7 @@ public class JobCandPanel extends JPanel {
 		panel_6.setBorder(new TitledBorder(null, "Location", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		JPanel panel_7 = new JPanel();
-		panel_7.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_7.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Note", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.TRAILING)
@@ -604,7 +604,8 @@ public class JobCandPanel extends JPanel {
 		kand.setGroup(detail[4]);
 		kand.setStatus(detail[5]);
 		
-		inter.setTanggal(detail[6]);
+		inter.setTanggal(in.getTglIndo(detail[6]));
+		System.out.println(inter.getTanggal());
 		inter.setJam_mulai(detail[7]);
 		inter.setJam_selesai(detail[8]);
 		inter.setDengan(detail[9]);
@@ -679,9 +680,9 @@ public class JobCandPanel extends JPanel {
 		
 		SetInterviewPanel sIP = new SetInterviewPanel();
 		try {
-			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
-					Integer.parseInt(inter.getTanggal().substring(5,7)),
-					Integer.parseInt(inter.getTanggal().substring(8,10)));
+			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0,2)),
+					Integer.parseInt(inter.getTanggal().substring(3,5)),
+					Integer.parseInt(inter.getTanggal().substring(6, 10)));
 			sIP.setDesc(inter.getDeskripsi());
 			sIP.setLoc(inter.getLokasi());
 			sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());

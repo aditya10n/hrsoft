@@ -252,7 +252,7 @@ public class Interview {
 					+ "jam_selesai, dengan, lokasi, deskripsi "
 				+ "FROM interview "
 				+ "WHERE id_kandidat='"+id_kandidat+"'");
-		inter.setTanggal(hasil[0]);
+		inter.setTanggal(getTglIndo(hasil[0]));
 		inter.setJam_mulai(hasil[1]);
 		inter.setJam_selesai(hasil[2]);
 		inter.setDengan(hasil[3]);
@@ -402,6 +402,17 @@ public class Interview {
 					+ "WHERE id_kandidat='"+id_kandidat+"'");
 			
 		
+	}
+	
+	public String getTglIndo(String tgl){
+		db=new DBSingle();
+		String[] hasil;
+		hasil = db.hasilStmtH("SELECT "
+				+ "DAY('"+tgl+"'), "
+				+ "MONTH('"+tgl+"'), "
+				+ "YEAR('"+tgl+"')");
+		
+		return hasil[0] +"-"+hasil[1]+"-"+hasil[2];
 	}
 	
 	

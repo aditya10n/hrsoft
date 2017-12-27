@@ -235,9 +235,9 @@ public class CandidatePanel extends JPanel {
 		in = new DBConn.Interview();
 		inter = in.getDataFK(id);
 		try {
-			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
-					Integer.parseInt(inter.getTanggal().substring(5,7)),
-					Integer.parseInt(inter.getTanggal().substring(8,10)));
+			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0,2)),
+					Integer.parseInt(inter.getTanggal().substring(3,5)),
+					Integer.parseInt(inter.getTanggal().substring(6, 10)));
 			sIP.setDesc(inter.getDeskripsi());
 			sIP.setLoc(inter.getLokasi());
 			sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());

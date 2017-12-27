@@ -37,15 +37,16 @@ import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.SpinnerDateModel;
+import javax.swing.UIManager;
 
 public class SetInterviewPanel extends JPanel {
 
 	private UtilDateModel model;
 	private JDatePanelImpl datePanel;
 	private JDatePickerImpl datePicker;
-	private JTextField textField;
-	JTextArea textPane;
-	JTextArea textPane_1;
+	public JTextField textField;
+	public JTextArea textPane;
+	public JTextArea textPane_1;
 	JSpinner spinner;
 	JSpinner spinner_1;
 	JSpinner.DateEditor de,deTo;
@@ -70,7 +71,7 @@ public class SetInterviewPanel extends JPanel {
 		panel.add(datePicker);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Note", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Time", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -187,7 +188,7 @@ public class SetInterviewPanel extends JPanel {
 	            new String[] { "OK", "Cancel" }, "OK");
 	}
 	
-	public void setTgl(int y, int m, int d){
+	public void setTgl(int d, int m, int y){
 		model.setSelected(true);
 		model.setDate(y, m-1, d);
 		datePanel= new JDatePanelImpl(model);
