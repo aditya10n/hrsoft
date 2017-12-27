@@ -101,7 +101,7 @@ public class Home_main extends JFrame {
 	 */
 	public Home_main() {
 		setTitle("HRSoft");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1024, 768);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		

@@ -406,14 +406,22 @@ public class Interview {
 	
 	public String getTglIndo(String tgl){
 		db=new DBSingle();
+		String hasilf = "";
 		String[] hasil;
 		hasil = db.hasilStmtH("SELECT "
 				+ "DAY('"+tgl+"'), "
 				+ "MONTH('"+tgl+"'), "
 				+ "YEAR('"+tgl+"')");
-		
-		return hasil[0] +"-"+hasil[1]+"-"+hasil[2];
+		try {
+			if(!hasil[0].isEmpty()){
+				hasilf= hasil[0] +"-"+hasil[1]+"-"+hasil[2];
+			}
+		} catch (Exception e) {
+			hasilf= "<Date>";
+		}
+		return hasilf;
 	}
+	
 	
 	
 	
