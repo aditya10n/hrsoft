@@ -58,6 +58,7 @@ public class Jobs extends JFrame {
 	private JButton btnEdit;
 	private JButton btnDelete;
 	private JButton btnAddCandidate;
+	String username;
 	/**
 	 * Launch the application.
 	 */
@@ -201,7 +202,7 @@ public class Jobs extends JFrame {
 					kan.setAlamat(cp.getAlamat());
 
 					Candidate cand = new Candidate();
-					cand.addCandidate(kan, "admin", listId[table.getSelectedRow()]);
+					cand.addCandidate(kan, getUsername(), listId[table.getSelectedRow()]);
 					preTable();
 				}else{
 					
@@ -328,5 +329,12 @@ public class Jobs extends JFrame {
 	public void deleteJob(String id_pekerjaan){
 		job.deleteJob(id_pekerjaan);
 		preTable();
+	}
+	public void setUsename(String username){
+		this.username=username;
+	}
+	
+	public String getUsername() {
+		return this.username;
 	}
 }

@@ -15,11 +15,17 @@ public class Login{
 		String pass;
 		boolean hasil= false;
 		DBSingle db = new DBSingle();
-		pass = db.hasilStmt("select * from staff where username='"+username+"'");
+		pass = db.hasilStmt("select password from staff where username='"+username+"'");
 		
 		if(password.equals(pass)){
 			hasil = true;
 		}
 		return hasil;
 	}
+	
+	public String getNama(String username){
+		DBSingle db = new DBSingle();
+		return db.hasilStmt("select nama from staff where username='"+username+"'");
+	}
+	
 }

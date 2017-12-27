@@ -57,6 +57,7 @@ public class Candidates extends JFrame {
 	Kandidat kand;
 	CandidatePanel cp;
 	DBConn.Interview in;
+	String username;
 	
 	
 	/**
@@ -215,7 +216,7 @@ public class Candidates extends JFrame {
 					
 					
 					listIdP = cand.listIdP();
-					cand.editCandidate(kand, "admin", listIdP[table.getSelectedRow()]);
+					cand.editCandidate(kand, getUsername(), listIdP[table.getSelectedRow()]);
 					
 					if(table.getColumnCount()==4){
 						prepare();
@@ -224,6 +225,8 @@ public class Candidates extends JFrame {
 					}
 				}
 			}
+
+			
 		});
 		btnEdit.setVisible(false);
 		
@@ -350,5 +353,13 @@ public class Candidates extends JFrame {
 		table.getColumnModel().getColumn(1).setMinWidth(150);
 		
 		listId=cand.listIdG(group);
+	}
+	
+	public void setUsename(String username){
+		this.username=username;
+	}
+	
+	public String getUsername() {
+		return this.username;
 	}
 }

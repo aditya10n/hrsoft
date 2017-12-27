@@ -34,8 +34,11 @@ import javax.swing.JDesktopPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+
+import DBConn.Staff;
 
 public class Home_main extends JFrame {
 
@@ -68,7 +71,14 @@ public class Home_main extends JFrame {
 	Candidates cand = new Candidates();
 	Interviews inter = new Interviews();
 	InterviewNow interN = new InterviewNow();
+	SetPassword sp = new SetPassword();
+	Staff staff = new Staff();
+	ListUser lu = new ListUser();
 	JLabel lblTime;
+	private JCheckBox chckbxUser;
+	private JButton btnLUser;
+	private JButton btnSetPassw;
+	
 
 	/**
 	 * Launch the application.
@@ -91,7 +101,7 @@ public class Home_main extends JFrame {
 	 */
 	public Home_main() {
 		setTitle("HRSoft");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 1024, 768);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
@@ -277,34 +287,63 @@ public class Home_main extends JFrame {
 			}
 		});
 		btnEfinished.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		
+		chckbxUser = new JCheckBox("USER");
+		chckbxUser.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		chckbxUser.setBorderPaintedFlat(true);
+		chckbxUser.setBorderPainted(true);
+		
+		btnLUser = new JButton("LIST USER");
+		btnLUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getListUser();
+			}
+		});
+		btnLUser.setVisible(false);
+		btnLUser.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		
+		btnSetPassw = new JButton("SET PASSW");
+		btnSetPassw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getSetPassPanel();
+			}
+		});
+		btnSetPassw.setVisible(false);
+		btnSetPassw.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addGap(44)
 					.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(51))
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(chckbxDataMaster, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnDataJob, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnCandidates, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(chckbxGroup, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnApplicant, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnInterview, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnHired, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(chckbxEvent, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnElist, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnEtoday, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnElater, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnEmissed, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-						.addComponent(btnEfinished, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+						.addComponent(chckbxUser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(chckbxDataMaster, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnDataJob, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnCandidates, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(chckbxGroup, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnApplicant, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnInterview, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnHired, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(chckbxEvent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnElist, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnEtoday, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnElater, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnEmissed, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnEfinished, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(btnLUser, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+					.addGap(18))
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnSetPassw, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
 					.addGap(18))
 		);
 		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(chckbxDataMaster)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -331,7 +370,13 @@ public class Home_main extends JFrame {
 					.addComponent(btnEmissed)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnEfinished)
-					.addPreferredGap(ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(chckbxUser, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnLUser)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSetPassw)
+					.addPreferredGap(ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
 					.addComponent(btnNewButton)
 					.addContainerGap())
 		);
@@ -381,8 +426,7 @@ public class Home_main extends JFrame {
 				if(chckbxDataMaster.isSelected()){
 					btnDataJob.setVisible(true);
 					btnCandidates.setVisible(true);
-					if(getId().equals("ADMIN")){
-					}
+					
 				}else{
 					btnDataJob.setVisible(false);
 					btnCandidates.setVisible(false);
@@ -444,23 +488,34 @@ public class Home_main extends JFrame {
 				}
 			}
 		});
+		
+		chckbxUser.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
+			public void mouseReleased(MouseEvent arg0) {
+				if(chckbxUser.isSelected()){
+					if(lbluser.getText().equals("admin")){
+						btnLUser.setVisible(true);
+					}
+					
+					btnSetPassw.setVisible(true);
+				}else{
+					btnLUser.setVisible(false);
+					btnSetPassw.setVisible(false);
+				}
+			}
+		});
+		
 		getCover();
 		clock();
 		
 	}
 	
-	/*
-	protected void getLaporanPerbulan() {
-		desktopPane.removeAll();
-		desktopPane.repaint();
-		internalFrame = new JInternalFrame("Laporan Penimbangan Perbulan", false, false);
-		LaporanPenimbanganPerbulan db = new LaporanPenimbanganPerbulan();
-		internalFrame.setContentPane(db.getContentPane());
-		desktopPane.add(internalFrame);
-		internalFrame.setVisible(true);
-		
-	}
-	*/
 	private void getCover() {
 		desktopPane.removeAll();
 		desktopPane.repaint();
@@ -480,24 +535,28 @@ public class Home_main extends JFrame {
 	private void getJobs(){
 		internalFrame.setContentPane(jobs.getContentPane());
 		internalFrame.setTitle("Jobs");
+		jobs.setUsename(lbluser.getText());
 		jobs.preTable();
 	}
 	
 	private void getCandidateApplicant(){
 		internalFrame.setContentPane(cand.getContentPane());
 		internalFrame.setTitle("Group Applicant");
+		cand.setUsename(lbluser.getText());
 		cand.prepare("APPLICANT");
 	}
 	
 	private void getCandidateInterview(){
 		internalFrame.setContentPane(cand.getContentPane());
 		internalFrame.setTitle("Group Interview");
+		cand.setUsename(lbluser.getText());
 		cand.prepare("INTERVIEW");
 	}
 	
 	private void getCandidateHired(){
 		internalFrame.setContentPane(cand.getContentPane());
 		internalFrame.setTitle("Group Hired");
+		cand.setUsename(lbluser.getText());
 		cand.prepare("HIRED");
 	}
 	
@@ -536,19 +595,37 @@ public class Home_main extends JFrame {
 		checkNowInterview(1);
 	}
 	
-	
-	public void setId(String s){
-		this.lbluser.setText(s);
-	}
-	public void setUser(String s){
-		this.lblNama.setText(s);
+	private void getListUser(){
+		internalFrame.setContentPane(lu.getContentPane());
+		internalFrame.setTitle("List User");
+		lu.prepare();
 	}
 	
-	public String getId(){
-		return lbluser.getText();
+	private void getSetPassPanel(){
+		sp = new SetPassword();
+		sp.username = lbluser.getText();
+		if(sp.showDialog("Change Password")==0){
+			if(sp.new1.getText().equals(sp.new2.getText())&&(sp.old.getText().equals(staff.getPass(lbluser.getText())))){
+				staff.setPass(lbluser.getText(), sp.new1.getText());
+				JOptionPane.showMessageDialog(null, "Password Changed!");
+			}else{
+				JOptionPane.showMessageDialog(null, "Wrong password, can't change password!");
+			}
+		}
+	}
+	
+	public void setNama(String nama){
+		this.lblNama.setText(nama);
+	}
+	public void setUser(String user){
+		this.lbluser.setText(user);
 	}
 	
 	public String getUser(){
+		return lbluser.getText();
+	}
+	
+	public String getNama(){
 		return lblNama.getText();
 	}
 	

@@ -1,8 +1,10 @@
 package Tampilan;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -45,10 +47,6 @@ public class Login extends JFrame {
 			public void run() {
 				try {
 					Login frame = new Login();
-					/*frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					frame.setUndecorated(true);
-					frame.setAlwaysOnTop(true);
-					frame.setResizable(false); */
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,9 +59,12 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		
 		setType(Type.UTILITY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 179);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		contentPane = new JPanel();
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
@@ -90,12 +91,16 @@ public class Login extends JFrame {
 				DBConn.Login login= new DBConn.Login();
 				if (login.cekPass(txtUsername.getText().toString(),
 									txtPassword.getText().toString())==true){
-					JOptionPane.showMessageDialog(null,"Login Sukses");
+					JOptionPane.showMessageDialog(null,"Login Success");
 					Home_main hm = new Home_main();
+					hm.setUser(txtUsername.getText());
+					hm.setNama(login.getNama(txtUsername.getText()));
+					
 					hm.setVisible(true);
+					
 					dispose();
 				}else{
-					JOptionPane.showMessageDialog(null,"Username atau Password salah");
+					JOptionPane.showMessageDialog(null,"Wrong Username or Password");
 				}
 			}
 		});
