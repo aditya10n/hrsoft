@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JMenuBar;
@@ -64,6 +66,9 @@ public class Home_main extends JFrame {
 	private JButton btnEfinished;
 	Jobs jobs = new Jobs();
 	Candidates cand = new Candidates();
+	Interviews inter = new Interviews();
+	InterviewNow interN = new InterviewNow();
+	JLabel lblTime;
 
 	/**
 	 * Launch the application.
@@ -118,7 +123,47 @@ public class Home_main extends JFrame {
 		
 		JLabel lblBulanPenimbanganBalita = new JLabel("");
 		lblBulanPenimbanganBalita.setFont(new Font("Source Code Pro Semibold", Font.BOLD, 27));
-		panel.add(lblBulanPenimbanganBalita);
+		
+		lblTime = new JLabel("Time");
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(51, 153, 255));
+		panel_3.setForeground(new Color(51, 153, 255));
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(463)
+							.addComponent(lblBulanPenimbanganBalita)
+							.addContainerGap(350, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblTime)
+							.addContainerGap())))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(5)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblBulanPenimbanganBalita)
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblTime)
+								.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
+							.addGap(11))))
+		);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblHrsoft = new JLabel("HRSoft");
+		panel_3.add(lblHrsoft, BorderLayout.CENTER);
+		lblHrsoft.setForeground(new Color(153, 255, 51));
+		lblHrsoft.setFont(new Font("Magneto", Font.BOLD, 35));
+		panel.setLayout(gl_panel);
 		
 		JPanel panel_1 = new JPanel();
 		panel_4.add(panel_1, BorderLayout.WEST);
@@ -175,7 +220,7 @@ public class Home_main extends JFrame {
 			}
 		});
 		
-		chckbxEvent = new JCheckBox("EVENT");
+		chckbxEvent = new JCheckBox("INTERVIEW");
 		chckbxEvent.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		chckbxEvent.setBorderPaintedFlat(true);
 		chckbxEvent.setBorderPainted(true);
@@ -328,7 +373,11 @@ public class Home_main extends JFrame {
 		
 		chckbxDataMaster.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {}@Override
+			public void mouseEntered(MouseEvent e) {}@Override
+			public void mouseExited(MouseEvent e) {}@Override
+			public void mousePressed(MouseEvent e) {}@Override
+			public void mouseReleased(MouseEvent e) {
 				if(chckbxDataMaster.isSelected()){
 					btnDataJob.setVisible(true);
 					btnCandidates.setVisible(true);
@@ -338,15 +387,7 @@ public class Home_main extends JFrame {
 					btnDataJob.setVisible(false);
 					btnCandidates.setVisible(false);
 				}
-					
-				
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}@Override
-			public void mouseExited(MouseEvent e) {}@Override
-			public void mousePressed(MouseEvent e) {}@Override
-			public void mouseReleased(MouseEvent e) {}
 		});
 		
 		
@@ -355,7 +396,13 @@ public class Home_main extends JFrame {
 		btnHired.setVisible(false);
 		chckbxGroup.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}@Override
+			public void mouseExited(MouseEvent e) {}@Override
+			public void mousePressed(MouseEvent e) {}@Override
+			public void mouseReleased(MouseEvent e) {
 				if(chckbxGroup.isSelected()){
 					btnApplicant.setVisible(true);
 					btnInterview.setVisible(true);
@@ -366,14 +413,7 @@ public class Home_main extends JFrame {
 					btnInterview.setVisible(false);
 					btnHired.setVisible(false);
 				}
-				
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}@Override
-			public void mouseExited(MouseEvent e) {}@Override
-			public void mousePressed(MouseEvent e) {}@Override
-			public void mouseReleased(MouseEvent e) {}
 		});
 		
 		btnElist.setVisible(false);
@@ -382,7 +422,13 @@ public class Home_main extends JFrame {
 		btnEmissed.setVisible(false);
 		chckbxEvent.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0) {}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
+			public void mouseReleased(MouseEvent arg0) {
 				if(chckbxEvent.isSelected()){
 					btnElist.setVisible(true);
 					btnEtoday.setVisible(true);
@@ -396,16 +442,11 @@ public class Home_main extends JFrame {
 					btnEmissed.setVisible(false);
 					btnEfinished.setVisible(false);
 				}
-				
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}@Override
-			public void mouseExited(MouseEvent arg0) {}@Override
-			public void mousePressed(MouseEvent arg0) {}@Override
-			public void mouseReleased(MouseEvent arg0) {}
 		});
 		getCover();
+		clock();
+		
 	}
 	
 	/*
@@ -461,33 +502,38 @@ public class Home_main extends JFrame {
 	}
 	
 	private void getListInterview(){
-		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setContentPane(inter.getContentPane());
 		internalFrame.setTitle("List Interview");
-		cand.prepare("HIRED");
+		inter.prepareList();
 	}
 	
 	private void getListInterviewToday(){
-		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setContentPane(inter.getContentPane());
 		internalFrame.setTitle("Interview Today");
-		cand.prepare("HIRED");
+		inter.prepareCost("TODAY");
+		inter.setStatus(false);
+		checkNowInterview(0);
+		
 	}
 	
 	private void getListInterviewLater(){
-		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setContentPane(inter.getContentPane());
 		internalFrame.setTitle("Interview Later");
-		cand.prepare("HIRED");
+		inter.prepareCost("LATER");
 	}
 	
 	private void getListInterviewMissed(){
-		internalFrame.setContentPane(cand.getContentPane());
+		internalFrame.setContentPane(inter.getContentPane());
 		internalFrame.setTitle("Interview Missed");
-		cand.prepare("HIRED");
+		inter.prepareCost("MISSED");
 	}
 	
 	private void getListInterviewFinish(){
-		internalFrame.setContentPane(cand.getContentPane());
-		internalFrame.setTitle("Interview Finished");
-		cand.prepare("HIRED");
+		internalFrame.setContentPane(inter.getContentPane());
+		internalFrame.setTitle("Interview Finish");
+		inter.prepareCost("FINISHED");
+		inter.setStatus(false);
+		checkNowInterview(1);
 	}
 	
 	
@@ -504,5 +550,93 @@ public class Home_main extends JFrame {
 	
 	public String getUser(){
 		return lblNama.getText();
+	}
+	
+	public void setTime(String time){
+		this.lblTime.setText(time);
+	}
+	
+	public String getTime(){
+		return this.lblTime.getText();
+	}
+	
+	
+	public void clock(){
+		Thread clock= new Thread(){
+			public void run(){
+				try {
+					for(;;){
+						Calendar cal = new GregorianCalendar();
+						
+						int day = cal.get(Calendar.DAY_OF_MONTH);
+						int month = cal.get(Calendar.MONTH);
+						int year = cal.get(Calendar.YEAR);
+						
+						int second = cal.get(Calendar.SECOND);
+						int minute = cal.get(Calendar.MINUTE);
+						int hour = cal.get(Calendar.HOUR+1);
+						
+						setTime("Time "+String.format("%02d", hour)+
+								":"+String.format("%02d", minute)+
+								":"+String.format("%02d", second)+
+								"   Date "+String.format("%02d", day)+
+								"/"+String.format("%02d", month)+
+								"/"+String.format("%02d", year));
+						
+						sleep(1000);
+					}
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		};
+		clock.start();
+	}
+	
+	public void checkNowInterview(final int mode){
+		Thread clock= new Thread(){
+			public void run(){
+				try {
+					int i =0;
+					while(!inter.getStatus()==true){
+						sleep(1000);
+					}
+						if(inter.getStatus()==true){
+							internalFrame.setContentPane(interN.getContentPane());
+							internalFrame.setTitle("Now Interview");
+							
+							interN.setIdSelected(inter.getIdSelected());
+							interN.prepare(inter.getStatusButton());
+							
+							Thread clock= new Thread(){
+								public void run(){
+									try {
+										while(!interN.getStatus()==false){
+											sleep(1000);
+										}
+										if(interN.getStatus()==false){
+											if(mode == 0){
+												getListInterviewToday();
+											}else if(mode == 1){
+													getListInterviewFinish();
+											}
+										}
+										
+									} catch (Exception e) {
+										// TODO: handle exception
+									}
+								}
+							};
+							clock.start();
+						}
+						
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		};
+		clock.start();
 	}
 }

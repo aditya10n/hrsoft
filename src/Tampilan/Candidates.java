@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -35,6 +36,8 @@ import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.swing.ListSelectionModel;
+
 public class Candidates extends JFrame {
 
 	private JPanel contentPane;
@@ -51,8 +54,9 @@ public class Candidates extends JFrame {
 	String group;
 	DefaultComboBoxModel cbmdef;
 	DefaultComboBoxModel cbmgroup;
-	Kandidat kand = new Kandidat();
-	CandidatePanel cp = new CandidatePanel();
+	Kandidat kand;
+	CandidatePanel cp;
+	DBConn.Interview in;
 	
 	
 	/**
@@ -75,6 +79,9 @@ public class Candidates extends JFrame {
 	 * Create the frame.
 	 */
 	public Candidates() {
+		kand = new Kandidat();
+		cp = new CandidatePanel();
+		in = new DBConn.Interview();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -94,23 +101,22 @@ public class Candidates extends JFrame {
 		panel_2.add(scrollPane);
 		
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 		table.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {}@Override
-			public void mousePressed(MouseEvent arg0) {}@Override
-			public void mouseExited(MouseEvent arg0) {}@Override
-			public void mouseEntered(MouseEvent arg0) {}@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
 					btnDelete.setVisible(true);
 					btnEdit.setVisible(true);
 					btnDetail.setVisible(true);
-					
 				}
-				
-			}
+			}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
+			public void mouseClicked(MouseEvent arg0) {}
 		});
 		
 		
@@ -173,7 +179,31 @@ public class Candidates extends JFrame {
 				cp.setStatus(kand.getStatus());
 				cp.setEdu(kand.getEducation());
 				cp.setExp(kand.getExperience());
+				cp.id = listId[table.getSelectedRow()];
+				
+				cp.group.setVisible(true);
+				cp.status.setVisible(true);
+				
+				cp.lblstatus.setVisible(false);
+				cp.lblgroup.setVisible(false);
+				
 				if(cp.showDialog("Detail Candidate : "+kand.getNama())==0){
+					if(kand.getGroup().toString().equals("INTERVIEW")||
+							kand.getGroup().toString().equals("HIRED")){
+							if(cp.getGroup().toString().equals("INTERVIEW")||
+									cp.getGroup().toString().equals("HIRED")){
+								
+							}else{
+								int result = JOptionPane.showConfirmDialog(null, 
+										"Interview Data : "+cp.getNama()
+										+" will be deleted! Are you sure ?");
+								if(result == 0){
+									in.delete(listId[table.getSelectedRow()]);
+								}else{
+									cp.setGroup(kand.getGroup());
+								}
+							}
+					}
 					kand.setNama(cp.getNama());
 					kand.setEmail(cp.getEmail());
 					kand.setPhone(cp.getPhone());
@@ -182,6 +212,7 @@ public class Candidates extends JFrame {
 					kand.setStatus(cp.getStatus());
 					kand.setEducation(cp.getEdu());
 					kand.setExperience(cp.getExp());
+					
 					
 					listIdP = cand.listIdP();
 					cand.editCandidate(kand, "admin", listIdP[table.getSelectedRow()]);
@@ -199,13 +230,15 @@ public class Candidates extends JFrame {
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				cand.deleteCandidate(listId[table.getSelectedRow()]);
-				if(table.getColumnCount()==4){
-					prepare();
-				}else{
-					prepare(group);
+				int result = JOptionPane.showConfirmDialog(null, "Delete Candidate :"+table.getValueAt( table.getSelectedRow(),0)+"?");
+				if(result == 0){
+					cand.deleteCandidate(listId[table.getSelectedRow()]);
+					if(table.getColumnCount()==4){
+						prepare();
+					}else{
+						prepare(group);
+					}
 				}
-				
 			}
 		});
 		btnDelete.setVisible(false);
@@ -222,6 +255,14 @@ public class Candidates extends JFrame {
 				cp.setStatus(kand.getStatus());
 				cp.setEdu(kand.getEducation());
 				cp.setExp(kand.getExperience());
+				
+				cp.group.setVisible(false);
+				cp.status.setVisible(false);
+				
+				cp.lblstatus.setVisible(true);
+				cp.lblstatus.setText(kand.getStatus());
+				cp.lblgroup.setVisible(true);
+				cp.lblgroup.setText(kand.getGroup());
 				
 				cp.detail();
 				cp.showDialog("Detail Candidate : "+kand.getNama());
@@ -304,11 +345,10 @@ public class Candidates extends JFrame {
 			table.getColumnModel().getColumn(i).setCellRenderer(center);
 			table.getColumnModel().getColumn(i).setResizable(false);
 		}
-		
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getColumnModel().getColumn(0).setMinWidth(210);
 		table.getColumnModel().getColumn(1).setMinWidth(150);
 		
-		listId=cand.listId();
+		listId=cand.listIdG(group);
 	}
 }

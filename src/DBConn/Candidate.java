@@ -83,7 +83,7 @@ public DefaultTableModel CandidateModel(String group){
 			"SELECT kandidat.nama, pekerjaan.nama, kandidat.status,"
 			+ "(SELECT COUNT(kandidat.nama) "
 			+ "FROM kandidat, pekerjaan "
-			+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan) AS COUNT "
+			+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan AND kandidat.grup='"+group+"') AS COUNT "
 				
 			+ "FROM kandidat, pekerjaan "
 			+ "WHERE kandidat.id_pekerjaan=pekerjaan.id_pekerjaan AND kandidat.grup='"+group+"'");
@@ -132,6 +132,19 @@ public DefaultTableModel CandidateModel(String group){
 					+ "from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan");
 		return hasil;
 	}
+	
+	public String[] listIdG(String group){
+		String[] hasil=null;
+		db = new DBSingle();
+			hasil = db.hasilStmtV("SELECT kandidat.id_kandidat, "
+					+ "(select COUNT(kandidat.id_kandidat) "
+					+ "from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan AND "
+					+ "kandidat.grup='"+group+"')AS COUNT "
+					+ "from kandidat,pekerjaan where kandidat.id_pekerjaan=pekerjaan.id_pekerjaan AND "
+					+ "kandidat.grup='"+group+"'");
+		return hasil;
+	}
+	
 	public String[] listIdP(){
 		String[] hasil=null;
 		db = new DBSingle();

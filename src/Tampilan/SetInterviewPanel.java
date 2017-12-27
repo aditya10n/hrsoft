@@ -243,6 +243,17 @@ public class SetInterviewPanel extends JPanel {
 		return deTo.getFormat().format(spinner_1.getValue())+":00";
 	}
 	
+	public void setEnabled(boolean value){
+		datePanel.setEnabled(value);
+		datePicker.setEnabled(value);
+		spinner.setEnabled(value);
+		spinner_1.setEnabled(value);
+		textPane.setEditable(value);
+		textPane_1.setEditable(value);
+		textField.setEditable(value);
+		
+	}
+	
 	
 	
 }

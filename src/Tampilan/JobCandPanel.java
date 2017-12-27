@@ -109,6 +109,7 @@ public class JobCandPanel extends JPanel {
 	private String[] listId;
 	String start;
 	String to;
+	DBConn.Interview in;
 	
 	
 	/**
@@ -117,6 +118,8 @@ public class JobCandPanel extends JPanel {
 	public JobCandPanel(String title, String idJob) {
 		id=idJob;
 		setLayout(new BorderLayout(0, 0));
+		
+		in = new DBConn.Interview();
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new CompoundBorder(new CompoundBorder(), null));
@@ -220,7 +223,7 @@ public class JobCandPanel extends JPanel {
 		comboBox = new JComboBox();
 		comboBox.setForeground(new Color(255, 0, 0));
 		comboBox.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED", "DROP"}));
 		comboBox.setSelectedIndex(1);
 		
 		comboBox.addActionListener(new ActionListener() {
@@ -228,10 +231,40 @@ public class JobCandPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!table.getValueAt(table.getSelectedRow(), 1).equals(comboBox.getSelectedItem().toString())){
+					
+					if(comboBox.getSelectedItem().toString().equals("INTERVIEW")){
+						btnSetInter.setEnabled(true);
+					}else if(comboBox.getSelectedItem().toString().equals("HIRED")){
+						btnSetInter.setEnabled(false);
+					}else{
+						if(table.getValueAt(table.getSelectedRow(), 1).toString().equals("INTERVIEW")||
+							table.getValueAt(table.getSelectedRow(), 1).toString().equals("HIRED")){
+							if(comboBox.getSelectedItem().toString().equals("INTERVIEW")||
+								comboBox.getSelectedItem().toString().equals("HIRED")){
+								
+							}else{
+								int result = JOptionPane.showConfirmDialog(null, 
+										"Interview Data : "+table.getValueAt(table.getSelectedRow(), 0)
+										+" will be deleted! Are you sure ?");
+								if(result == 0){
+									in.delete(listId[table.getSelectedRow()]);
+									btnSetInter.setEnabled(false);
+								}else{
+									comboBox.setSelectedItem(table.getValueAt(table.getSelectedRow(), 1));
+									btnSetInter.setEnabled(true);
+								}
+							}
+						}
+						
+					}
+					
 					cand.editGroup(listId[table.getSelectedRow()], comboBox.getSelectedItem().toString());
 					table.setValueAt(comboBox.getSelectedItem(), table.getSelectedRow(), 1);
 					comboBox_1.setSelectedItem("not Confirmed");
 					setSumGroup(id);
+					setDetail(listId[table.getSelectedRow()]);
+					
+					
 				}
 				
 			}
@@ -329,6 +362,7 @@ public class JobCandPanel extends JPanel {
 		});
 		
 		btnSetInter = new JButton("Set Interview");
+		btnSetInter.setEnabled(false);
 		btnSetInter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				openSetInterview();
@@ -438,6 +472,7 @@ public class JobCandPanel extends JPanel {
 		panel_7.add(scrollPane_2, BorderLayout.CENTER);
 		
 		valueDesc = new JTextArea();
+		valueDesc.setEditable(false);
 		scrollPane_2.setViewportView(valueDesc);
 		panel_6.setLayout(new BorderLayout(0, 0));
 		
@@ -445,6 +480,7 @@ public class JobCandPanel extends JPanel {
 		panel_6.add(scrollPane_1, BorderLayout.CENTER);
 		
 		valueLoc = new JTextArea();
+		valueLoc.setEditable(false);
 		scrollPane_1.setViewportView(valueLoc);
 		panel_5.setLayout(gl_panel_5);
 		panel_3.setLayout(gl_panel_3);
@@ -469,35 +505,21 @@ public class JobCandPanel extends JPanel {
 		table.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
+			public void mouseReleased(MouseEvent arg0) {}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
 					setDetail(listId[table.getSelectedRow()]);
 					btnSetInter.setVisible(true);
 					panel_3.setVisible(true);
+					
+					if(table.getValueAt(table.getSelectedRow(), 1).toString().equals("INTERVIEW")){
+						btnSetInter.setEnabled(true);
+					}else{
+						btnSetInter.setEnabled(false);
+					}
 				}
 				
 			}
@@ -664,9 +686,7 @@ public class JobCandPanel extends JPanel {
 			sIP.setLoc(inter.getLokasi());
 			sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
 			sIP.setWith(inter.getDengan());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		} catch (Exception e) {}
 		
 		
 		

@@ -234,42 +234,19 @@ public class Jobs extends JFrame {
 		preTable();
 		
 		
-		table.addMouseListener(new MouseListener() {
-			
-			@Override
+		table.addMouseListener(new MouseListener() {@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
 				if(table.isColumnSelected(table.getSelectedColumn())){
 					btnSelect.setVisible(true);
 					btnEdit.setVisible(true);
 					btnDelete.setVisible(true);
 					btnAddCandidate.setVisible(true);
-					
 				}
-			}
+			}@Override
+			public void mousePressed(MouseEvent arg0) {}@Override
+			public void mouseExited(MouseEvent arg0) {}@Override
+			public void mouseEntered(MouseEvent arg0) {}@Override
+			public void mouseClicked(MouseEvent arg0) {}
 		});
 		
 	}

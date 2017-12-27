@@ -23,16 +23,25 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import Kelas.Interview;
 
 public class CandidatePanel extends JPanel {
 	private JTextField fieldNama;
 	private JTextField fieldPhone;
 	private JTextField fieldEmail;
 	JTextPane alamat;
-	JComboBox group;
-	JComboBox status;
+	public JComboBox group;
+	public JComboBox status;
 	JTextArea textPaneExp;
 	JTextArea textPaneEdu;
+	public JLabel lblgroup;
+	public JLabel lblstatus;
+	public String id;
+	JButton btnSetInterview;
+	DBConn.Interview in = new DBConn.Interview();
 		
 	
 	/**
@@ -54,6 +63,14 @@ public class CandidatePanel extends JPanel {
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new TitledBorder(null, "Experience", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		btnSetInterview = new JButton("Set Interview");
+		btnSetInterview.setEnabled(false);
+		btnSetInterview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openSetInterview(id);
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -65,23 +82,27 @@ public class CandidatePanel extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))))
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+								.addComponent(btnSetInterview, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(btnSetInterview)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
@@ -107,11 +128,35 @@ public class CandidatePanel extends JPanel {
 		status = new JComboBox();
 		status.setModel(new DefaultComboBoxModel(new String[] {"not Confirmed", "Confirmed"}));
 		panel_2.add(status, BorderLayout.CENTER);
+		
+		lblstatus = new JLabel("<status>");
+		lblstatus.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblstatus, BorderLayout.NORTH);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		group = new JComboBox();
-		group.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED"}));
+		group.setModel(new DefaultComboBoxModel(new String[] {"APPLICANT", "INTERVIEW", "HIRED", "DROP"}));
 		panel_1.add(group, BorderLayout.CENTER);
+		
+		group.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(group.getSelectedItem().equals("INTERVIEW")){
+					btnSetInterview.setEnabled(true);
+				}else{
+					if(!group.getSelectedItem().equals("HIRED")){
+						in.delete(id);
+					}
+					btnSetInterview.setEnabled(false);
+				}
+			}
+		});
+		
+		lblgroup = new JLabel("<group>");
+		lblgroup.setHorizontalAlignment(SwingConstants.CENTER);
+		lblgroup.setVisible(false);
+		panel_1.add(lblgroup, BorderLayout.NORTH);
 				
 		JLabel lblNama = new JLabel("Nama");
 		
@@ -184,6 +229,55 @@ public class CandidatePanel extends JPanel {
 	            new String[] { "OK", "Cancel" }, "OK");
 	}
 	
+	public void openSetInterview(String id){
+		SetInterviewPanel sIP = new SetInterviewPanel();
+		Kelas.Interview inter = new Kelas.Interview();
+		in = new DBConn.Interview();
+		inter = in.getDataFK(id);
+		try {
+			sIP.setTgl(Integer.parseInt(inter.getTanggal().substring(0, 4)),
+					Integer.parseInt(inter.getTanggal().substring(5,7)),
+					Integer.parseInt(inter.getTanggal().substring(8,10)));
+			sIP.setDesc(inter.getDeskripsi());
+			sIP.setLoc(inter.getLokasi());
+			sIP.setTime(inter.getJam_mulai(),inter.getJam_selesai());
+			sIP.setWith(inter.getDengan());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		int response = sIP.showDialog("Set Interview"); //==============================
+		if(response == 0){
+			System.out.println("Save Set Interview");
+			
+			Kelas.Interview interN = new Interview();
+			
+			interN.setTanggal(sIP.getTgl());
+			interN.setJam_mulai(sIP.getTimeStart());
+			interN.setJam_selesai(sIP.getTimeTo());
+			interN.setDengan(sIP.getWith());
+			interN.setLokasi(sIP.getLoc());
+			interN.setDeskripsi(sIP.getDesc());
+			
+			if(inter.getDengan()==null && 
+					inter.getDeskripsi()==null &&
+					inter.getHasil()==null &&
+					inter.getId_interview()==null &&
+					inter.getJam_mulai()==null &&
+					inter.getJam_selesai()==null&&
+					inter.getLokasi()==null &&
+					inter.getTanggal()==null){
+				in.add(id,interN);
+			}else{
+				in.update(id,interN);
+			}
+			
+			
+		}else{
+			System.out.println("Cancel");
+		}
+	}
+	
 	public void detail(){
 		fieldNama.setEditable(false);
 		fieldEmail.setEditable(false);
@@ -235,6 +329,8 @@ public class CandidatePanel extends JPanel {
 			model = 1;
 		}else if(group.equals("HIRED")){
 			model = 2;
+		}else if(group.equals("DROP")){
+			model = 3;
 		}
 		this.group.setSelectedIndex(model);
 	}
